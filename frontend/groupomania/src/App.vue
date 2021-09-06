@@ -1,25 +1,36 @@
 <template>
   <div id="app">
-		<nav>
-			<Signup />
-			<a href="/about">À propos</a>
-			<a href="/contact">Contact</a>
-		</nav>
-		<p>Bienvenue sur notre page d'<Signup /></p>
-	</div>
+      <router-view/>
+  </div>
+  
 </template>
-
-<script>
-import Signup from './components/Signup.vue'
-
-export default {
-  name: 'App',
-  components: {
-    Signup
-  }
-}
-</script>
 
 <style lang="scss">
 
+.btn-sign
+{
+  border-radius: 30px;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+
+#nav {
+
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
 </style>
