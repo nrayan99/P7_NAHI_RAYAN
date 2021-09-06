@@ -5,6 +5,31 @@ export default {
   name: 'Login',
   components : {
     HeaderLogin
+  },
+  methods: {
+    postLogin(e){
+      e.preventDefault();
+      const login = {
+        email : document.getElementById('InputEmail').value,
+        password : document.getElementById('InputPassword').value,
+      }
+      fetch('http://localhost:3000/api/auth/login', {
+
+          method : "POST",
+          body :  JSON.stringify(login),
+          headers : {
+              'Accept': 'application/json',
+              "Content-Type": "application/json",
+          }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
   }
 }
 </script>
@@ -27,7 +52,7 @@ export default {
           <input type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
         </div>
         </div>
-        <button @click="postSignup" type="submit" class="btn btn-primary mt-3 mb-3">S'inscrire</button>
+        <button @click="postLogin" type="submit" class="btn btn-primary mt-3 mb-3">Se connecter</button>
       </form>
     </div>
   </div>

@@ -8,13 +8,13 @@ export default {
   methods : 
   {
     
-    postSignup(){
+    postSignup(e){
+      e.preventDefault();
       const signup = {
         nickname : document.getElementById('InputNickname').value,
         email : document.getElementById('InputEmail').value,
         password : document.getElementById('InputPassword').value,
       }
-      console.log(signup)
       fetch('http://localhost:3000/api/auth/signup', {
 
           method : "POST",
@@ -29,8 +29,8 @@ export default {
           console.log(json)
         })
         .catch((error) => {
-            console.log(error);
-        })
+          alert(error)
+    })
     }
   }
   }
