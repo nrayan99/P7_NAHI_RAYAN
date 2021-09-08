@@ -11,6 +11,7 @@ export default {
 
 
 <template>
+  <div class="headerLogin">
     <HeaderLogin/>
-
+  </div>
 </template>

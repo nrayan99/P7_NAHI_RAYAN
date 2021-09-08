@@ -1,17 +1,24 @@
 <script>
 import HeaderLogin from '../components/HeaderLogin.vue';
-
 export default {
   name: 'Login',
   components : {
-    HeaderLogin
+    HeaderLogin,
   },
+  data() {
+    return {
+      item :{
+      userId : null
+    }
+    }
+  },
+
   methods: {
     postLogin(e){
       e.preventDefault();
       const login = {
-        email : document.getElementById('InputEmail').value,
-        password : document.getElementById('InputPassword').value,
+        email : this.email,
+        password : this.password
       }
       fetch('http://localhost:3000/api/auth/login', {
 
@@ -24,7 +31,14 @@ export default {
         })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json)
+          if ( !json.error)
+          {
+              localStorage.setItem('userId', json.userId);
+              localStorage.setItem('token', json.token)
+            this.$router.push('forum');
+            
+          }
+          
         })
         .catch((error) => {
             console.log(error);
@@ -43,13 +57,13 @@ export default {
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
           <label for="InputEmail">Email</label>
-          <input type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+          <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
         </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
           <label for="InputPassword">Mot de passe</label>
-          <input type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
+          <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
         </div>
         </div>
         <button @click="postLogin" type="submit" class="btn btn-primary mt-3 mb-3">Se connecter</button>

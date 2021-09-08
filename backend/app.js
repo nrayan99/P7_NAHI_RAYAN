@@ -1,5 +1,6 @@
 const express =require('express');
 const userRoutes = require('./routes/user');
+const postsRoutes = require('./routes/posts');
 
   const app = express();
   
@@ -12,5 +13,6 @@ const userRoutes = require('./routes/user');
 
   app.use(express.json());
   app.use('/api/auth', userRoutes);
+  app.use('/api/posts', postsRoutes)
 
   module.exports = app; 

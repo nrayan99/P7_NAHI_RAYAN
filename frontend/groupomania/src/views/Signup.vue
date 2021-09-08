@@ -11,9 +11,9 @@ export default {
     postSignup(e){
       e.preventDefault();
       const signup = {
-        nickname : document.getElementById('InputNickname').value,
-        email : document.getElementById('InputEmail').value,
-        password : document.getElementById('InputPassword').value,
+        nickname : this.nickname,
+        email : this.email,
+        password : this.password
       }
       fetch('http://localhost:3000/api/auth/signup', {
 
@@ -45,19 +45,19 @@ export default {
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
             <label for="InputNickname">Pseudo</label>
-            <input type="text" class="form-control" id="InputNickname" name ="InputNickname" placeholder="Pseudo">
+            <input v-model='nickname' type="text" class="form-control" id="InputNickname" name ="InputNickname" placeholder="Pseudo">
           </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
           <label for="InputEmail">Email</label>
-          <input type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+          <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
         </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
           <label for="InputPassword">Mot de passe</label>
-          <input type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
+          <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
         </div>
         </div>
         <button @click="postSignup" type="submit" class="btn btn-primary mt-3 mb-3">S'inscrire</button>

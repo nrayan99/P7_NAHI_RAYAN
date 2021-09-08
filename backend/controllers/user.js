@@ -24,7 +24,7 @@ exports.login = (req,res,next) =>
 {
     const email = req.body.email;
     
-    var sql = `SELECT password FROM users WHERE email = '${email}'`;
+    var sql = `SELECT * FROM users WHERE email = '${email}'`;
     db.query(sql, function (err, result,fields) {
       if (err){
         res.status(403).json({error : err});
