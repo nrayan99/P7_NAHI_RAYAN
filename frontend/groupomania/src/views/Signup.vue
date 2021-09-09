@@ -26,7 +26,8 @@ export default {
         })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json)
+          alert(json.message)
+          this.$router.push('login');
         })
         .catch((error) => {
           alert(error)

@@ -13,7 +13,7 @@ exports.signup = (req,res,next) =>
              if (err){
                 res.status(403).json({error : err});
              };
-      console.log("1 record inserted");
+             res.status(200).json({ message: 'Compte crée avec succès'});
         })
     })
     .catch( error => res.status(500).json({error}));

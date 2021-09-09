@@ -1,5 +1,4 @@
 <script>
-
 export default {
   name: 'CreatePosts',
   data () {
@@ -15,12 +14,14 @@ export default {
   methods : {
         submitPost(e){
           e.preventDefault();
+          let formData= new FormData()
+          formData.append('file',JSON.stringify(this.item.image));
           const post = {
               userId : localStorage.getItem('userId'),
-              imageUrl : this.item.imageUrl,
+              file : formData,
               post_text : this.textarea
           }
-          console.log(post);
+          console.log(JSON.stringify(post.file));
           fetch('http://localhost:3000/api/posts/createPost', {
 
           method : "POST",
@@ -32,9 +33,7 @@ export default {
         })
         .then((response) => response.json())
         .then((json) => {
-         
-          console.log(json)
-         
+            return json; 
         })
         .catch((error) => {
             console.log(error);

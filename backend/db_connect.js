@@ -19,7 +19,7 @@ db.connect(function(err) {
         if (err) throw err;
         console.log("Table users available");
     });
-    var postsTable = "CREATE TABLE IF NOT EXISTS posts (id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,userId  SMALLINT, imageUrl  VARCHAR(255), post_text TEXT)";
+    var postsTable = "CREATE TABLE IF NOT EXISTS posts (id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,nickname  VARCHAR(255), imageUrl  VARCHAR(255), post_text TEXT)";
     db.query(postsTable, function (err, result) {
         if (err) throw err;
         console.log("Table posts available");

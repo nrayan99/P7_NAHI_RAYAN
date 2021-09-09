@@ -11,6 +11,6 @@ module.exports = (req, res, next) => { // Vérifie si l'UserId de la requete est
             next();
         }
     } catch (error){
-        res.status(401).json({error: error | 'Requête non authentifiée'})
+        res.status(401).json({error:'Requête non authentifiée'})
     }
 }

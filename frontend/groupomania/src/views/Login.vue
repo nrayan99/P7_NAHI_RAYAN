@@ -34,8 +34,8 @@ export default {
           if ( !json.error)
           {
               localStorage.setItem('userId', json.userId);
-              localStorage.setItem('token', json.token)
-            this.$router.push('forum');
+              localStorage.setItem('token', json.token);
+              this.$router.push('forum');
             
           }
           
