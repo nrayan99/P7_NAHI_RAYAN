@@ -1,11 +1,15 @@
 <template>  
   <div class='forumPosts'>
-    <div v-for="item in Posts" :key="item.imageUrl" class="card">
-      <img  class="card-img-top" alt="Card image cap">
+    <div class='container '>
+    <div v-for="item in this.$store.state.Posts" :key="item.imageUrl" class="card mb-5 mx-auto">
+      <img v-if='item.imageUrl' :src="item.imageUrl" class="card-img-top" alt="Card image cap">
       <div class="card-body">
-        <p class="card-text"></p>
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        <p class="card-text">{{item.post_text}}</p>
+        <p class="card-text"><small class="text-muted">Publié par <router-link  :to="{path:'/profiles:'+item.nickname}">{{item.nickname}}</router-link> </small></p>
       </div>
+      <button v-if="this.nickname==item.nickname" class="btn mb-1">Supprimer</button>
+      <button v-if="this.nickname==item.nickname" class="btn ">Modifier</button>
+    </div>
     </div>
   </div>
 </template>
@@ -14,9 +18,11 @@
 <script>
 export default {
   name: 'ForumPosts',
-  data() { return {
-    Posts : {}
-  }
+  data (){
+    return {
+      nickname : localStorage.nickname
+    }
+      
     
   },
   beforeMount(){
@@ -35,8 +41,7 @@ export default {
       }
       else
       {
-        console.log(json[0]);
-        this.Posts = json;
+        this.$store.dispatch('setCurrentPosts',json);
       }
     })
     .catch(err=>err);
@@ -47,6 +52,23 @@ export default {
 } 
 </script>
 
-<style scoped>
-
+<style scoped lang='scss'>
+  .btn
+  {
+    background-color:#ffd7d7 ;
+    display:inline;
+    border-radius: 0px;
+  }
+  .card
+  {
+    
+    width: 70%;
+    border-radius: 20 20 0 0;
+    img
+    {
+      border-radius: 20px 20px 0px 0px;
+      max-height: 300px;
+      box-sizing: content-box;
+    }
+  }
 </style>

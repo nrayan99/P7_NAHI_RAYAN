@@ -35,6 +35,7 @@ export default {
           {
               localStorage.setItem('userId', json.userId);
               localStorage.setItem('token', json.token);
+              localStorage.setItem('nickname',json.nickname)
               this.$router.push('forum');
             
           }

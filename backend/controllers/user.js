@@ -26,10 +26,10 @@ exports.login = (req,res,next) =>
     
     var sql = `SELECT * FROM users WHERE email = '${email}'`;
     db.query(sql, function (err, result,fields) {
-      if (err){
-        res.status(403).json({error : err});
-      };
-      const password = result[0].password;
+      if (err) throw err;
+      if (result.length>0)
+      {
+        const password = result[0].password;
       bcrypt.compare(req.body.password, password)
       .then(valid => {
           if (!valid){
@@ -37,6 +37,7 @@ exports.login = (req,res,next) =>
           }
           res.status(200).json({
             userId: result[0].id,
+            nickname: result[0].nickname,
                 token: jwt.sign(
                     {userId : result[0].id},
                     'RANDOM_TOKEN_SECRET',
@@ -45,6 +46,12 @@ exports.login = (req,res,next) =>
         });
       })
       .catch(error => res.status(500).json({error}));
+      }
+      else
+      {
+        return res.status(401).json({error:'Utilisateur non trouvé !'});
+      }
+      
     })
     
     

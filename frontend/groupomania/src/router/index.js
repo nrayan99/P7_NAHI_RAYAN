@@ -8,6 +8,11 @@ const routes = [
     component : () => import('../views/Forum.vue')
   },
   {
+    path: '/profiles:nickname',
+    name : 'Profiles',
+    component : () => import('../views/Profiles.vue')
+  },
+  {
     path: '/',
     name : 'Home',
     component : () => import('../views/Home.vue')
