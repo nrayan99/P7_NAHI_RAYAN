@@ -3,10 +3,11 @@ export default {
   name: 'CreatePosts',
   data () {
       return {
+          textarea:null,
            item:{
           //...
           image : null,
-          imageUrl: null
+          imageUrl: null,
         }
       }
      
@@ -63,7 +64,7 @@ export default {
                 <button v-if="item.imageUrl" @click="delImg" id='delbtn'>X</button>
                 <img v-if="item.imageUrl" :src="item.imageUrl" />
             </div>
-            <textarea class="mx-3" v-model='textarea' placeholder="Quelque chose à partager ?"></textarea>
+            <textarea v-model='textarea' class="mx-3" placeholder="Quelque chose à partager ?"></textarea>
             <button class="btn" @click="submitPost" >ENVOYER</button>
         </div>
     </div>

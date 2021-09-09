@@ -7,7 +7,7 @@
         <p class="card-text">{{item.post_text}}</p>
         <p class="card-text"><small class="text-muted">Publié par <router-link  :to="{path:'/profiles:'+item.nickname}">{{item.nickname}}</router-link> </small></p>
       </div>
-      <button v-if="this.nickname==item.nickname" class="btn mb-1">Supprimer</button>
+      <button v-if="this.nickname==item.nickname" @click="delPost(item.id)" class="btn mb-1">Supprimer</button>
       <button v-if="this.nickname==item.nickname" class="btn ">Modifier</button>
     </div>
     </div>
@@ -47,7 +47,19 @@ export default {
     .catch(err=>err);
   },
   methods : {
-
+    delPost(postid)
+    {
+      fetch('http://localhost:3000/api/posts/deletePost/' + postid, {
+      method: 'DELETE',
+      headers : {'Authorization' : 'Bearer '+ localStorage.getItem('token')}
+      })
+      .then(res => res.json()) // or res.json()
+      .then(json => {
+        console.log(json);
+        this.$store.dispatch('setCurrentPosts',json);
+      })
+      .catch(err=>err);
+    }
   }
 } 
 </script>

@@ -23,8 +23,5 @@ export default {
 
 
 <style scoped lang='scss'>
-  .forum
-  {
-    background-color: #fefee2;
-  }
+
 </style>

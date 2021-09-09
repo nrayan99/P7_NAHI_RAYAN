@@ -5,5 +5,6 @@ const auth = require('../middleware/auth')
 const multer = require('../middleware/multer-config'); // on importe le middleware de configuration de multer afin de l'utiliser pour les routes necessitant le multer
 
 router.post('/createPost',multer, postsCtrl.createPost); 
-router.get('/getAllPosts', auth, postsCtrl.getAllPosts)
+router.get('/getAllPosts', auth, postsCtrl.getAllPosts);
+router.delete('/deletePost/:id',postsCtrl.deletePost);
 module.exports=router;

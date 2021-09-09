@@ -36,3 +36,20 @@ exports.getAllPosts = (req, res , next) => {
     
   })
 }
+exports.deletePost = (req, res , next) => {
+  console.log(req.params); 
+  var sql = `DELETE FROM posts WHERE id=('${req.params.id}')`;
+  db.query(sql, function (err, result,fields) {
+    if (err){
+       return res.status(403).json({error : err});
+    };
+    db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) {
+      if (err){
+         return res.status(403).json({error : err});
+      };
+      res.json(result);
+      
+    })
+    
+  })
+}
