@@ -7,4 +7,5 @@ const multer = require('../middleware/multer-config'); // on importe le middlewa
 router.post('/createPost',multer, postsCtrl.createPost); 
 router.get('/getAllPosts', auth, postsCtrl.getAllPosts);
 router.delete('/deletePost/:id',postsCtrl.deletePost);
+router.put('/updatePost/:id',multer, postsCtrl.updatePost)
 module.exports=router;

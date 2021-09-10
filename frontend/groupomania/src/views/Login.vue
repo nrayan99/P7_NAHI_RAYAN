@@ -35,7 +35,8 @@ export default {
           {
               localStorage.setItem('userId', json.userId);
               localStorage.setItem('token', json.token);
-              localStorage.setItem('nickname',json.nickname)
+              localStorage.setItem('nickname',json.nickname);
+              localStorage.setItem('admin',json.admin);
               this.$router.push('forum');
             
           }
@@ -53,6 +54,7 @@ export default {
   
    <div class="login">
     <HeaderLogin />
+    <span id='loginmsg'>Veuillez vous connecter</span>
     <div class="card">
       <form>
         <div class="form-group row d-flex justify-content-center">
@@ -69,12 +71,21 @@ export default {
         </div>
         <button @click="postLogin" type="submit" class="btn btn-primary mt-3 mb-3">Se connecter</button>
       </form>
+       <p class="card-text"><small class="text-muted">Pas de compte ? <router-link  to="/signup">S'inscrire</router-link></small></p>
     </div>
   </div>
 
 </template>
 
 <style scoped lang='scss'>
+.card-text
+{
+  display: inline;
+}
+ #loginmsg
+ {
+   font-weight: bold;
+ }
  .card
   {
     margin-left: auto;

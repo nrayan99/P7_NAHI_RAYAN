@@ -5,7 +5,6 @@ export default {
       return {
           textarea:null,
            item:{
-          //...
           image : null,
           imageUrl: null,
         }
@@ -13,8 +12,7 @@ export default {
      
   },
   methods : {
-        submitPost(e){
-          e.preventDefault();
+        submitPost(){
           const fd = new FormData()
           fd.append('image',this.item.image);
           fd.append('userId',localStorage.getItem('userId'));
@@ -32,9 +30,10 @@ export default {
         })
         .then((json) => {
             this.$store.dispatch('setCurrentPosts',json);
-            this.item.imageUrl=null;
             this.item.image=null;
+            this.item.imageUrl=null;
             this.textarea=null;
+            document.getElementById('image').value='';
         })
         .catch((error) => {
             console.log(error);
@@ -49,6 +48,7 @@ export default {
         {
             this.item.imageUrl=null;
             this.item.image=null;
+            document.getElementById('image').value='';
         }
     }
 }
@@ -60,9 +60,9 @@ export default {
         <div class='container d-flex mb-3 justify-content-center'>
             <label v-if="!item.imageUrl" for="image" class="btn">Choisir une image</label>
             <input @change="uploadImage" id="image" type="file" accept="image/png, image/jpeg, image/jpg" >
-            <div id="preview">
-                <button v-if="item.imageUrl" @click="delImg" id='delbtn'>X</button>
-                <img v-if="item.imageUrl" :src="item.imageUrl" />
+            <div  v-if="item.imageUrl" id="preview">
+                <button @click="delImg" id='delbtn'>X</button>
+                <img :src="item.imageUrl" />
             </div>
             <textarea v-model='textarea' class="mx-3" placeholder="Quelque chose à partager ?"></textarea>
             <button class="btn" @click="submitPost" >ENVOYER</button>
@@ -78,6 +78,7 @@ export default {
     }
     textarea{
         border-radius: 20px;
+         width: 50%;
     }
     .btn
     {
@@ -86,10 +87,6 @@ export default {
         width: 10%;
         font-weight: bold;
         
-    }
-    textarea
-    {
-        width: 50%;
     }
     #preview
     {
