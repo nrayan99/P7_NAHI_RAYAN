@@ -1,7 +1,7 @@
 <template>  
   <div class='forumPosts'>
     <div class='container '>
-      <div v-for="item in this.$store.state.Posts" :key="item.imageUrl">
+      <div v-for="item in postsList" :key="item.id">
           <div v-if='this.currentPostUpdate!==item.id' class='postDisplayed card mb-5 mx-auto'>
             <img v-if='item.imageUrl' :src="item.imageUrl" class="card-img-top" alt="Card image cap">
             <div class="card-body">
@@ -18,12 +18,12 @@
               <input @change="uploadImage" id="imageupdate" type="file" accept="image/png, image/jpeg, image/jpg" >
               <div  v-if="this.updatePost.imageUrl" id="preview">
                   <button @click="delImg" id='delbtn'>X</button>
-                  <img :src="this.updatePost.imageUrl" />
+                  <img :src="this.updatePost.imageUrl"/>
               </div>
               <textarea v-model='updatePost.textarea' class="mx-3" placeholder="Quelque chose à partager ?"></textarea>
               <div class='d-flex flex-column'>
                 <button class="btn mb-2" @click="postUpdating">MODIFIER</button>
-                <button class="btn" @click="this.currentPostUpdate=null;this.currentPostUpdate.imageDeleted=false" >ANNULER</button>
+                <button class="btn" @click="cancelUpdate" >ANNULER</button>
               </div>
             </div>
           </div>
@@ -37,13 +37,16 @@
 <script>
 export default {
   name: 'ForumPosts',
+  props:['postsList','nicknameprop'],
   data (){
     return {
+      nicknamep : this.nicknameprop,
       updatePost :{
+        
         imageUrl: null,
         image : null,
         textarea:null,
-        imageDeleted:false,
+        imageDeleted:0,
       },
       nickname : localStorage.nickname,
       admin : localStorage.admin,
@@ -63,27 +66,43 @@ export default {
     .then(json=>{
       if (json.error ==='Requête non authentifiée')
       {
-        alert('Veuillez vous connecter');
+        
         this.$router.push('login');
       }
       else
       {
         this.$store.dispatch('setCurrentPosts',json);
+        
       }
     })
     .catch(err=>err);
   },
-  methods : {
+  methods :{ 
+  cancelUpdate()
+  {
+    this.currentPostUpdate=null;
+    this.currentPostUpdate.imageDeleted=0
+  }
+  ,
     delPost(postid)
     {
       fetch('http://localhost:3000/api/posts/deletePost/' + postid, {
       method: 'DELETE',
       headers : {'Authorization' : 'Bearer '+ localStorage.getItem('token')}
       })
-      .then(res => res.json()) // or res.json()
+      .then(res => res.json()) 
       .then(json => {
-        console.log(json);
-        this.$store.dispatch('setCurrentPosts',json);
+            if(this.nicknamep)
+            {
+              this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+              console.log(this.nicknamep);
+            }
+            else
+            {
+              this.$store.dispatch('setCurrentPosts',json);
+            }
+            
+        
       })
       .catch(err=>err);
     },
@@ -97,7 +116,7 @@ export default {
     {
       this.updatePost.imageUrl=null;
       this.updatePost.image=null;
-      this.updatePost.imageDeleted=true;
+      this.updatePost.imageDeleted=1;
       document.getElementById('imageupdate').value='';
     },
     uploadImage(e) 
@@ -106,13 +125,18 @@ export default {
       this.updatePost.image = file
       this.updatePost.imageUrl = URL.createObjectURL(file)
     },
-     postUpdating()
-    {
+     async postUpdating()
+    { 
           const fd = new FormData()
+          console.log(this.updatePost.imageDeleted)
           fd.append('image',this.updatePost.image);
-          fd.append('userId',localStorage.getItem('userId'));
           fd.append('post_text',this.updatePost.textarea);
-          fd.append('imagedeleted',this.updatePost.imageDeleted)     
+          fd.append('imagedeleted',this.updatePost.imageDeleted) 
+            this.updatePost.imageDeleted=0;
+            this.updatePost.image=null;
+            this.updatePost.imageUrl=null;
+            document.getElementById('imageupdate').value=''
+          console.log(fd)   
           fetch('http://localhost:3000/api/posts/updatePost/'+ this.currentPostUpdate, {
           method : "PUT",
           body :  fd,
@@ -125,12 +149,24 @@ export default {
             return response.json();
         })
         .then((json) => {
-            this.$store.dispatch('setCurrentPosts',json);
-            this.currentPostUpdate=null;
+            
+            if(this.nicknamep)
+            {
+            this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+            }
+            else
+            {
+              this.$store.dispatch('setCurrentPosts',json);
+            }
+            
+            
+            
+            
         })
-        .catch((error) => {
-            console.log(error);
+        .catch((error) => {error;
         })
+        this.currentPostUpdate=null
+         
     }
    
   }

@@ -23,7 +23,6 @@ exports.createPost = (req, res , next) => {
               res.json(result);
               
             })
-            console.log("1 record inserted");
         })
   })
 }
@@ -43,7 +42,6 @@ exports.deletePost = (req, res , next) => {
     if (err){
       return res.status(403).json({error : err});
     };
-    console.log(result[0].imageUrl)
     const filename = result[0].imageUrl.split('/images/')[1];
         fs.unlink(`images/${filename}`, () =>{
     
@@ -54,36 +52,26 @@ exports.deletePost = (req, res , next) => {
     if (err){
        return res.status(403).json({error : err});
     };
+
+      
+    })
     db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) {
       if (err){
          return res.status(403).json({error : err});
       };
       res.json(result);
-      
-    })
     
   })
 }
 exports.updatePost = (req,res,next) => {
+  
   db.query(`SELECT * FROM posts WHERE id=('${req.params.id}')`, function (err, result,fields) {
     if (err){
       return res.status(403).json({error : err});
     };
-    if (req.body.imagedeleted && !req.file)
-    {
-      const filename = result[0].imageUrl.split('/images/')[1];
-      fs.unlink(`images/${filename}`, () =>{
-    
-      });
-      
-      db.query(`UPDATE posts SET imageUrl = '' WHERE id = '${req.params.id}'`, function (err, result,fields) {
-        if (err){
-           return res.status(403).json({error : err});
-        };
-      })
-    }
     if (req.file)
     {
+      console.log("test")
       const imageUrl=`${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
       const filename = result[0].imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () =>{
@@ -95,6 +83,23 @@ exports.updatePost = (req,res,next) => {
            return res.status(403).json({error : err});
         };
       })
+    }
+    else
+    {
+      if (req.body.imagedeleted==1)
+      {
+        console.log("mimote")
+        const filename = result[0].imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () =>{
+      
+        });
+        
+        db.query(`UPDATE posts SET imageUrl = '' WHERE id = '${req.params.id}'`, function (err, result,fields) {
+          if (err){
+             return res.status(403).json({error : err});
+          };
+        })
+      }
     }
     db.query(`UPDATE posts SET post_text = '${req.body.post_text}' WHERE id = '${req.params.id}'`, function (err, result,fields) {
       if (err){
@@ -110,4 +115,15 @@ exports.updatePost = (req,res,next) => {
 
   });
 
+}
+
+exports.getPostsByNickname = (req, res , next) => {
+  var sql = `SELECT * FROM posts  WHERE nickname ='${req.params.id}' ORDER BY id DESC`;
+  db.query(sql, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    res.json(result);
+    
+  })
 }

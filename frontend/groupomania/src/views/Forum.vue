@@ -17,7 +17,7 @@ export default {
     <div class='forum'>
         <HeaderForum/>
         <CreatePosts/>
-        <ForumPosts/> 
+        <ForumPosts :postsList='this.$store.state.Posts'/> 
     </div>
 </template>
 
