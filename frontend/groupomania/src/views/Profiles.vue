@@ -1,14 +1,15 @@
 <script>
 import HeaderForum from '../components/HeaderForum.vue';
 import ForumPosts from '../components/ForumPosts.vue';
+import UpdateProfile from '../components/UpdateProfile.vue'
 export default {
   name: 'Profiles',
-    created(){
+  created(){
     fetch('http://localhost:3000/api/posts/getPostsByNickname/'+this.nickname,{
       method :'GET',
-       headers : {
-              'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-          }
+      headers : {
+        'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+      }
     })
     .then(posts=> posts.json())
     .then(json=>{
@@ -22,29 +23,29 @@ export default {
         this.$store.state.PostsByNickname = json;
       }
     })
-    .catch(err=> console.log (err));
+    .catch(err=>(err));
   },
   data (){
     return {
-        nickname: window.location.href.split('profiles:')[1],
-        
+      nickname: window.location.href.split('profiles:')[1],
     }
   },
   components : {
-    HeaderForum,ForumPosts
+    HeaderForum,ForumPosts,UpdateProfile
   },
   methods : {
-    }
   }
+}
+
 </script>
 
 
 <template>
   <div class="profile">
     <HeaderForum />
-    <img src="../assets/no-picture.jpg">
-    <p id='userNickname'>{{this.nickname}}</p>
+    <UpdateProfile class='mb-3' />
     <h2>Articles : </h2>
+    <h3 v-if="this.$store.state.PostsByNickname.length==0" > Aucun article publié</h3>
     <ForumPosts :nicknameprop='this.nickname' :postsList='this.$store.state.PostsByNickname '/> 
   </div>
 </template>

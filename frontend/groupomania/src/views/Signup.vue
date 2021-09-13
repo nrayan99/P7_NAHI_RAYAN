@@ -7,7 +7,6 @@ export default {
   },
   methods : 
   {
-    
     postSignup(e){
       e.preventDefault();
       const signup = {
@@ -16,25 +15,24 @@ export default {
         password : this.password
       }
       fetch('http://localhost:3000/api/auth/signup', {
-
-          method : "POST",
-          body :  JSON.stringify(signup),
-          headers : {
-              'Accept': 'application/json',
-              "Content-Type": "application/json",
-          }
-        })
-        .then((response) => response.json())
-        .then((json) => {
-          alert(json.message)
-          this.$router.push('login');
-        })
-        .catch((error) => {
-          alert(error)
-    })
+        method : "POST",
+        body :  JSON.stringify(signup),
+        headers : {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        }
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        alert(json.message)
+        this.$router.push('login');
+      })
+      .catch((error) => {
+        alert(error)
+      })
     }
   }
-  }
+}
 </script>
 
 
@@ -52,15 +50,15 @@ export default {
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
-          <label for="InputEmail">Email</label>
-          <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
-        </div>
+            <label for="InputEmail">Email</label>
+            <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+          </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
-          <label for="InputPassword">Mot de passe</label>
-          <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
-        </div>
+            <label for="InputPassword">Mot de passe</label>
+            <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
+          </div>
         </div>
         <button @click="postSignup" type="submit" class="btn btn-primary mt-3 mb-3">S'inscrire</button>
       </form>
@@ -71,20 +69,20 @@ export default {
 
 
 <style scoped lang='scss'>
- #signupmsg
- {
-   font-weight: bold;
- }
+#signupmsg
+{
+  font-weight: bold;
+}
 .card-text
 {
   display: inline;
 }
-  .card
-  {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    border-radius: 20px;
-    background-color: #ffd7d7;
-  }
+.card
+{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 20px;
+  background-color: #ffd7d7;
+}
 </style>

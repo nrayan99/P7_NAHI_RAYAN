@@ -1,43 +1,45 @@
 <script>
 export default {
-  name: 'CreatePosts',
-  data () {
-      return {
-          textarea:null,
-           item:{
-          image : null,
-          imageUrl: null,
-        }
-      }
-     
-  },
-  methods : {
+    name: 'CreatePosts',
+    data () {
+        return {
+            textarea:null,
+            item: {
+                image : null,
+                imageUrl: null,
+            }
+        }     
+    },
+    methods : {
         submitPost(){
-          const fd = new FormData()
-          fd.append('image',this.item.image);
-          fd.append('userId',localStorage.getItem('userId'));
-          fd.append('post_text',this.textarea)         
-          fetch('http://localhost:3000/api/posts/createPost', {
-          method : "POST",
-          body :  fd,
-          headers : {
-              'Accept': 'application/json',
-              'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-          }
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((json) => {
-            this.$store.dispatch('setCurrentPosts',json);
-            this.item.image=null;
-            this.item.imageUrl=null;
-            this.textarea=null;
-            document.getElementById('image').value='';
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            const fd = new FormData()
+            fd.append('image',this.item.image);
+            fd.append('userId',localStorage.getItem('userId'));
+            fd.append('post_text',this.textarea)         
+            fetch('http://localhost:3000/api/posts/createPost', {
+                method : "POST",
+                body :  fd,
+                headers : {
+                    'Accept': 'application/json',
+                    'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+                }
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((json) => {
+                if (json.error ==='Requête non authentifiée')
+                {
+                alert('Veuillez vous connecter');
+                this.$router.push('login');
+                }
+                this.$store.dispatch('setCurrentPosts',json);
+                this.item.image=null;
+                this.item.imageUrl=null;
+                this.textarea=null;
+                document.getElementById('image').value='';
+            })
+            .catch((error) => error)
         },
         uploadImage(e) {
             const file = e.target.files[0]
@@ -71,34 +73,35 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-    #image
+
+#image
+{
+    visibility: hidden;
+    width: 0%;
+}
+textarea{
+    border-radius: 20px;
+    width: 50%;
+}
+.btn
+{
+    border-radius: 20px;
+    background-color: #ffd7d7;
+    width: 10%;
+    font-weight: bold;
+    
+}
+#preview
+{
+    position: relative;
+    img
     {
-        visibility: hidden;
-        width: 0%;
+        height:90px;
+        width: 100%;
     }
-    textarea{
-        border-radius: 20px;
-         width: 50%;
-    }
-    .btn
+    #delbtn
     {
-        border-radius: 20px;
-        background-color: #ffd7d7;
-        width: 10%;
-        font-weight: bold;
-        
+        position: absolute;
     }
-    #preview
-    {
-        position: relative;
-        img
-        {
-            height:90px;
-            width: 100%;
-        }
-        #delbtn
-        {
-            position: absolute;
-        }
-    }
+}
 </style>

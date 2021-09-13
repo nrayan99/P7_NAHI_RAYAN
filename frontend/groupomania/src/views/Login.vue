@@ -7,12 +7,11 @@ export default {
   },
   data() {
     return {
-      item :{
+      item : {
       userId : null
-    }
+      }
     }
   },
-
   methods: {
     postLogin(e){
       e.preventDefault();
@@ -24,26 +23,22 @@ export default {
           method : "POST",
           body :  JSON.stringify(login),
           headers : {
-              'Accept': 'application/json',
-              "Content-Type": "application/json",
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
           }
         })
         .then((response) => response.json())
         .then((json) => {
           if ( !json.error)
           {
-              localStorage.setItem('userId', json.userId);
-              localStorage.setItem('token', json.token);
-              localStorage.setItem('nickname',json.nickname);
-              localStorage.setItem('admin',json.admin);
-              this.$router.push('forum');
-            
+            localStorage.setItem('userId', json.userId);
+            localStorage.setItem('token', json.token);
+            localStorage.setItem('nickname',json.nickname);
+            localStorage.setItem('admin',json.admin);
+            this.$router.push('forum');  
           }
-          
         })
-        .catch((error) => {
-            console.log(error);
-        })
+        .catch((error) => error)
     }
   }
 }
@@ -58,19 +53,19 @@ export default {
       <form>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
-          <label for="InputEmail">Email</label>
-          <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
-        </div>
+            <label for="InputEmail">Email</label>
+            <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+          </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
-          <label for="InputPassword">Mot de passe</label>
-          <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
-        </div>
+            <label for="InputPassword">Mot de passe</label>
+            <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
+          </div>
         </div>
         <button @click="postLogin" type="submit" class="btn btn-primary mt-3 mb-3">Se connecter</button>
       </form>
-       <p class="card-text"><small class="text-muted">Pas de compte ? <router-link  to="/signup">S'inscrire</router-link></small></p>
+      <p class="card-text"><small class="text-muted">Pas de compte ? <router-link  to="/signup">S'inscrire</router-link></small></p>
     </div>
   </div>
 
@@ -81,16 +76,16 @@ export default {
 {
   display: inline;
 }
- #loginmsg
- {
-   font-weight: bold;
- }
- .card
-  {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    border-radius: 20px;
-    background-color: #ffd7d7;
-  }
+#loginmsg
+{
+  font-weight: bold;
+}
+.card
+{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 20px;
+  background-color: #ffd7d7;
+}
 </style>

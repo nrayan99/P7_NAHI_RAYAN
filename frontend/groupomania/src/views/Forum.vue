@@ -14,11 +14,11 @@ export default {
 
 
 <template>
-    <div class='forum'>
-        <HeaderForum/>
-        <CreatePosts/>
-        <ForumPosts :postsList='this.$store.state.Posts'/> 
-    </div>
+  <div class='forum'>
+    <HeaderForum/>
+    <CreatePosts/>
+    <ForumPosts :postsList='this.$store.state.Posts'/> 
+  </div>
 </template>
 
 

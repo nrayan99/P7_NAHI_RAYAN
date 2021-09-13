@@ -11,7 +11,6 @@
             <button v-if="this.nickname==item.nickname || this.admin==1"  @click="delPost(item.id)" class="btn mb-1">Supprimer</button>
             <button v-if="this.nickname==item.nickname || this.admin==1" @click='displayPostUpdate(item.id,item.imageUrl,item.post_text)' class="btn ">Modifier</button>
           </div>
-
           <div v-else class='postUpdate'>
             <div class='container d-flex mb-3 justify-content-center'>
               <label v-if="!this.updatePost.imageUrl" for="imageupdate" class="btn">Choisir une image</label>
@@ -27,12 +26,10 @@
               </div>
             </div>
           </div>
-
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -42,7 +39,6 @@ export default {
     return {
       nicknamep : this.nicknameprop,
       updatePost :{
-        
         imageUrl: null,
         image : null,
         textarea:null,
@@ -52,21 +48,18 @@ export default {
       admin : localStorage.admin,
       currentPostUpdate : null,
     }
-      
-    
   },
   beforeMount(){
     fetch('http://localhost:3000/api/posts/getAllPosts',{
       method :'GET',
-       headers : {
-              'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-          }
+      headers : {
+        'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+      }
     })
     .then(posts=> posts.json())
     .then(json=>{
       if (json.error ==='Requête non authentifiée')
       {
-        
         this.$router.push('login');
       }
       else
@@ -78,31 +71,33 @@ export default {
     .catch(err=>err);
   },
   methods :{ 
-  cancelUpdate()
-  {
-    this.currentPostUpdate=null;
-    this.currentPostUpdate.imageDeleted=0
-  }
-  ,
+    cancelUpdate()
+    {
+      this.currentPostUpdate=null;
+      this.currentPostUpdate.imageDeleted=0
+    }
+    ,
     delPost(postid)
     {
       fetch('http://localhost:3000/api/posts/deletePost/' + postid, {
-      method: 'DELETE',
-      headers : {'Authorization' : 'Bearer '+ localStorage.getItem('token')}
+        method: 'DELETE',
+        headers : {'Authorization' : 'Bearer '+ localStorage.getItem('token')}
       })
       .then(res => res.json()) 
       .then(json => {
-            if(this.nicknamep)
-            {
-              this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
-              console.log(this.nicknamep);
-            }
-            else
-            {
-              this.$store.dispatch('setCurrentPosts',json);
-            }
-            
-        
+        if (json.error ==='Requête non authentifiée')
+        {
+          alert('Veuillez vous connecter');
+          this.$router.push('login');
+        }
+        if(this.nicknamep)
+        {
+          this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+        }
+        else
+        {
+          this.$store.dispatch('setCurrentPosts',json);
+        }   
       })
       .catch(err=>err);
     },
@@ -125,99 +120,96 @@ export default {
       this.updatePost.image = file
       this.updatePost.imageUrl = URL.createObjectURL(file)
     },
-     async postUpdating()
+    postUpdating()
     { 
-          const fd = new FormData()
-          console.log(this.updatePost.imageDeleted)
-          fd.append('image',this.updatePost.image);
-          fd.append('post_text',this.updatePost.textarea);
-          fd.append('imagedeleted',this.updatePost.imageDeleted) 
-            this.updatePost.imageDeleted=0;
-            this.updatePost.image=null;
-            this.updatePost.imageUrl=null;
-            document.getElementById('imageupdate').value=''
-          console.log(fd)   
-          fetch('http://localhost:3000/api/posts/updatePost/'+ this.currentPostUpdate, {
-          method : "PUT",
-          body :  fd,
-          headers : {
-              'Accept': 'application/json',
-              'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-          }
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((json) => {
-            
-            if(this.nicknamep)
-            {
-            this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
-            }
-            else
-            {
-              this.$store.dispatch('setCurrentPosts',json);
-            }
-            
-            
-            
-            
-        })
-        .catch((error) => {error;
-        })
-        this.currentPostUpdate=null
-         
+      const fd = new FormData()
+      fd.append('image',this.updatePost.image);
+      fd.append('post_text',this.updatePost.textarea);
+      fd.append('imagedeleted',this.updatePost.imageDeleted) 
+      this.updatePost.imageDeleted=0;
+      this.updatePost.image=null;
+      this.updatePost.imageUrl=null;
+      document.getElementById('imageupdate').value='' 
+      fetch('http://localhost:3000/api/posts/updatePost/'+ this.currentPostUpdate, {
+        method : "PUT",
+        body :  fd,
+        headers : {
+            'Accept': 'application/json',
+            'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+        }
+      })
+      .then((response) => {
+          return response.json();
+      })
+      .then((json) => {
+        if (json.error ==='Requête non authentifiée')
+        {
+          alert('Veuillez vous connecter');
+          this.$router.push('login');
+        }
+        if(this.nicknamep)
+        {
+        this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+        }
+        else
+        {
+          this.$store.dispatch('setCurrentPosts',json);
+          
+        }
+      })
+      .catch((error) => {error;
+      })
+    this.currentPostUpdate=null
     }
-   
   }
-} 
+}
 </script>
 
 <style scoped lang='scss'>
- #imageupdate
-    {
-        visibility: hidden;
-        width: 0%;
-    }
-  .btn
+#imageupdate
+{
+  visibility: hidden;
+  width: 0%;
+}
+.btn
+{
+  background-color:#ffd7d7 ;
+  display:inline;
+  border-radius: 0px;
+}
+.card
+{
+  width: 70%;
+  border-radius: 20px 20px 0px 0px;
+  img
   {
-    background-color:#ffd7d7 ;
-    display:inline;
-    border-radius: 0px;
-  }
-  .card
-  {
-    
-    width: 70%;
     border-radius: 20px 20px 0px 0px;
-    img
-    {
-      border-radius: 20px 20px 0px 0px;
-      max-height: 300px;
-      box-sizing: content-box;
-    }
+    max-height: 300px;
+    box-sizing: content-box;
   }
-      #image
-    {
-        visibility: hidden;
-        width: 0%;
-    }
-    textarea{
-        border-radius: 20px;
-        width: 50%;
-    }
+}
+#image
+{
+  visibility: hidden;
+  width: 0%;
+}
+textarea
+{
+  border-radius: 20px;
+  width: 50%;
+}
 
-    #preview
-    {
-        position: relative;
-        img
-        {
-            height:90px;
-            width: 100%;
-        }
-        #delbtn
-        {
-            position: absolute;
-        }
-    }
+#preview
+{
+  position: relative;
+  img
+  {
+    height:90px;
+    width: 100%;
+  }
+  #delbtn
+  {
+    position: absolute;
+  }
+}
 </style>
