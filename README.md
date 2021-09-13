@@ -17,6 +17,10 @@ MYSQL_DB= *Votre nom de base de donnée MYSQL*
 
 TOKEN_KEY=*Choisir une clé complexe pour les tokens de JSONWEBTOKEN*
 
+**Lancement du projet**
+- Dans la console sur le dossier backend saisir : "node server" ou "nodemon serve" si vous avez nodemon
+- Dans la console sur le dossier frontend/groupomania saisir : "npm run serve"
+
 
 **Creation d'un compte admin sur l'API**
 - Creer un compte sur l'API
