@@ -64,7 +64,7 @@ export default {
         this.$swal.fire({
         title :"Inscription échoué",
         icon : 'error',
-        html :"Votre email doit etre de la forme suivante :</br> example@example.ex </br> Votre mot de passe doit contenir : 1 majuscule,1 minuscule et 8 caracteres </br>Votre pseudo ne doit pas contenir de caractères spéciaux"});
+        html :"Votre email doit etre de la forme suivante :</br> example@example.ex </br> Votre mot de passe doit contenir : 1 chiffre, 1 majuscule,1 minuscule et au moins 8 caracteres </br>Votre pseudo ne doit pas contenir de caractères spéciaux"});
       }
     }
   }
@@ -82,18 +82,21 @@ export default {
           <div class="col-8">
             <label for="InputNickname">Pseudo</label>
             <input v-model='nickname' type="text" class="form-control" id="InputNickname" name ="InputNickname" placeholder="Pseudo">
+            <p><small>Ne doit pas contenir de caractères</small></p>
           </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
             <label for="InputEmail">Email</label>
             <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+            <p><small>Doit être de la forme suivante: example@example.ex  </small></p>
           </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
             <label for="InputPassword">Mot de passe</label>
             <input v-model='password' type="password" class="form-control" id="InputPassword" name ="InputPassword" placeholder="Mot de passe">
+            <p><small>Doit contenir : 1 chiffre, 1 majuscule,1 minuscule et au moins 8 caracteres</small></p>
           </div>
         </div>
         <button @click="postSignup" type="submit" class="btn btn-primary mt-3 mb-3">S'inscrire</button>
@@ -110,6 +113,10 @@ export default {
   color : navy;
 }
 #signupmsg
+{
+  font-weight: bold;
+}
+label
 {
   font-weight: bold;
 }

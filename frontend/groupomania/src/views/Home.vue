@@ -28,5 +28,11 @@ export default {
 </template>
 
 <style scoped lang="scss">
-
+.btn
+{
+    @media ( max-width: 991px)
+    {
+        width: 100%;
+    }
+}
 </style>

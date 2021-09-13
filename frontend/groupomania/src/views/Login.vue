@@ -64,7 +64,7 @@ export default {
         <div class="form-group row d-flex justify-content-center">
           <div class="col-8">
             <label for="InputEmail">Email</label>
-            <input v-model='email' type="email" class="form-control" id="InputEmail" name ="InputEmail" placeholder="Email">
+            <input v-model='email' type="email" class="form-control mb-3" id="InputEmail" name ="InputEmail" placeholder="Email">
           </div>
         </div>
         <div class="form-group row d-flex justify-content-center">
@@ -85,6 +85,10 @@ export default {
 .router-link
 {
   color : navy;
+}
+label
+{
+  font-weight: bold;
 }
 .card-text
 {

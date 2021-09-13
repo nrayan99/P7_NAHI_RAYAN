@@ -210,7 +210,7 @@ export default {
 textarea
 {
   border-radius: 20px;
-  width: 50%;
+  width: 60%;
 }
 
 #preview
