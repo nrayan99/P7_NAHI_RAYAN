@@ -2,6 +2,7 @@ const db = require('../db_connect');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+require('dotenv').config();
 
 exports.signup = (req,res,next) =>
 {
@@ -14,7 +15,7 @@ exports.signup = (req,res,next) =>
         var sql = `INSERT INTO users (nickname, email, password, admin, profileimg) VALUES ('${nickname}','${email}','${password}', '0' , '${profileimg}')`;
         db.query(sql, function (err, result) {
              if (err){
-                return res.status(403).json({error : err});
+                return res.status(403).json({error : "Les informations entrées sont déjà utilisées"});
              };
              return res.status(200).json({ message: 'Compte crée avec succès'});
         })
@@ -44,7 +45,7 @@ exports.login = (req,res,next) =>
               nickname: result[0].nickname,
               token: jwt.sign(
                   {userId : result[0].id},
-                  'RANDOM_TOKEN_SECRET',
+                  process.env.TOKEN_KEY,
                   { expiresIn : '24h'}
               )
           });

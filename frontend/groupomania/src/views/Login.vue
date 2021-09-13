@@ -19,7 +19,7 @@ export default {
         email : this.email,
         password : this.password
       }
-      fetch('http://localhost:3000/api/auth/login', {
+      fetch('http://localhost:3000/api/users/login', {
           method : "POST",
           body :  JSON.stringify(login),
           headers : {
@@ -37,9 +37,19 @@ export default {
             localStorage.setItem('admin',json.admin);
             this.$router.push('forum');  
           }
+          else
+          {
+            this.$swal.fire({
+            title :"Connexion échouée",
+            icon : 'error',
+            text:json.error});
+          }
         })
         .catch((error) => error)
     }
+  },
+  beforeCreate(){
+    localStorage.clear();
   }
 }
 </script>
@@ -65,15 +75,20 @@ export default {
         </div>
         <button @click="postLogin" type="submit" class="btn btn-primary mt-3 mb-3">Se connecter</button>
       </form>
-      <p class="card-text"><small class="text-muted">Pas de compte ? <router-link  to="/signup">S'inscrire</router-link></small></p>
+      <p class="card-text"><small>Pas de compte ? <router-link class="router-link" to="/signup">S'inscrire</router-link></small></p>
     </div>
   </div>
 
 </template>
 
 <style scoped lang='scss'>
+.router-link
+{
+  color : navy;
+}
 .card-text
 {
+  font-weight: bold;
   display: inline;
 }
 #loginmsg

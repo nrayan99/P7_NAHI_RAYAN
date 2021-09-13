@@ -5,31 +5,67 @@ export default {
   components : {
     HeaderLogin
   },
+    beforeCreate(){
+    localStorage.clear();
+  },
   methods : 
   {
+    textValidation(value) {
+    const regex = /^[A-Za-z][^_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/;
+    return regex.test(value);
+    },
+    emailValidation(value) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
+      return regex.test(value);
+    },
+    passwordValidation (value) {
+      const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/ ;
+      return regex.test(value);
+    },
     postSignup(e){
       e.preventDefault();
-      const signup = {
+      if(this.emailValidation(this.email) && this.passwordValidation(this.password) && this.textValidation(this.nickname))
+      {
+        const signup = {
         nickname : this.nickname,
         email : this.email,
         password : this.password
       }
-      fetch('http://localhost:3000/api/auth/signup', {
-        method : "POST",
-        body :  JSON.stringify(signup),
-        headers : {
-          'Accept': 'application/json',
-          "Content-Type": "application/json",
-        }
-      })
-      .then((response) => response.json())
-      .then((json) => {
-        alert(json.message)
-        this.$router.push('login');
-      })
-      .catch((error) => {
-        alert(error)
-      })
+      fetch('http://localhost:3000/api/users/signup', {
+          method : "POST",
+          body :  JSON.stringify(signup),
+          headers : {
+              'Accept': 'application/json',
+              "Content-Type": "application/json",
+          }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.error)
+          {
+            this.$swal.fire({
+            title :"Inscription échouée",
+            icon : 'error',
+            text:json.error});
+          }
+          else
+          {
+            this.$swal.fire({
+              title :json.message,
+              icon : 'success'});
+            this.$router.push('login');
+          }
+          
+        })
+        .catch((error) => error)
+      }
+      else
+      {
+        this.$swal.fire({
+        title :"Inscription échoué",
+        icon : 'error',
+        html :"Votre email doit etre de la forme suivante :</br> example@example.ex </br> Votre mot de passe doit contenir : 1 majuscule,1 minuscule et 8 caracteres </br>Votre pseudo ne doit pas contenir de caractères spéciaux"});
+      }
     }
   }
 }
@@ -62,19 +98,24 @@ export default {
         </div>
         <button @click="postSignup" type="submit" class="btn btn-primary mt-3 mb-3">S'inscrire</button>
       </form>
-      <p class="card-text"><small class="text-muted">Déjà membre ? <router-link  to="/login">Se connecter</router-link></small></p>
+      <p class="card-text"><small>Déjà membre ? <router-link class='router-link' to="/login">Se connecter</router-link></small></p>
     </div>
   </div>
 </template>
 
 
 <style scoped lang='scss'>
+.router-link
+{
+  color : navy;
+}
 #signupmsg
 {
   font-weight: bold;
 }
 .card-text
 {
+  font-weight: bold;
   display: inline;
 }
 .card

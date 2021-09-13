@@ -1,14 +1,14 @@
 const mysql = require('mysql');
-
+require('dotenv').config();
 const db = mysql.createConnection({
 
-    host: "localhost",
+    host: process.env.MYSQL_HOST,
  
-    user: "root",
+    user: process.env.MYSQL_USER,
  
-    password: "groupo",
+    password: process.env.MYSQL_PASSWORD,
 
-    database: "groupomania"
+    database: process.env.MYSQL_DB,
   });
 
 db.connect(function(err) {

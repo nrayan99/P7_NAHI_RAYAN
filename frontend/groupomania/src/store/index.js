@@ -27,6 +27,18 @@ export default createStore({
       })
       .then(posts=> posts.json())
       .then(json=>{
+        if (json.error ==='Requête non authentifiée')
+        {
+          this.$swal.fire({
+            title :"Veuillez vous connecter",
+            icon : 'warning',
+          text:json.error});
+          this.$router.push('login')
+        }
+        if (json.error)
+        {
+          return json.error
+        }
         context.commit('setCurrentPostsByNickname',json)
       })
       .catch(err=>(err));
