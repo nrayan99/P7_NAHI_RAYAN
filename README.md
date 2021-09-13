@@ -25,6 +25,6 @@ TOKEN_KEY=*Choisir une clé complexe pour les tokens de JSONWEBTOKEN*
 **Creation d'un compte admin sur l'API**
 - Creer un compte sur l'API
 - Dans la console de MYSQL veuillez entrer cette ligne : UPDATE users SET admin = 1 WHERE nickname = '*Le pseudo de l'utilisateur que vous souhaitez rendre admin*'
-
+- Puis se connecter avec le compte
 
  
