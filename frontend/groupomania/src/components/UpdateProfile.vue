@@ -19,6 +19,13 @@ export default {
         text:json.error});
         this.$router.push('login')
       }
+      if(json.error)
+      {
+        this.$swal.fire({
+          title :json.error,
+          icon : 'error'});
+        this.$router.push('forum')
+      }
       this.profileImageUrl=json;
       this.item.imageUrl=json
     })

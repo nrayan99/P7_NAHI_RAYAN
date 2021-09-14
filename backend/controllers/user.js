@@ -65,8 +65,14 @@ exports.getProfileImageByNickname = (req,res,next) => {
     if (err){
       return res.status(403).json({error : err});
     };
-    return res.json(result[0].profileimg);
-    
+    if (result.length>0)
+    {
+      return res.json(result[0].profileimg);
+    }
+    else
+    {
+      return res.status(404).json({error:"Utilisateur inexistant"})
+    }
   })
 }
 
