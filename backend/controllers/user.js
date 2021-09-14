@@ -71,6 +71,18 @@ exports.getProfileImageByNickname = (req,res,next) => {
 }
 
 exports.UpdateProfilePicture = (req,res,next) => {
+  db.query(`SELECT profileimg FROM users WHERE nickname=('${req.params.nickname}')`, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    const filename = result[0].profileimg.split('/images/')[1];
+    if(filename!=='no-picture.jpg')
+    {
+      fs.unlink(`images/${filename}`, () =>{
+
+    });
+    }
+  })
   var ProfilePictureUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   var sql = `UPDATE users SET profileimg = '${ProfilePictureUrl}' WHERE nickname = '${req.params.nickname}'`
   db.query(sql, function (err, result,fields) {
