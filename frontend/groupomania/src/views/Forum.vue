@@ -9,6 +9,10 @@ export default {
     ForumPosts,
     CreatePosts
   }
+  ,
+  beforeCreate(){
+    this.$store.dispatch('setCurrentPostsLength')
+  },
 }
 </script>
 
@@ -17,7 +21,7 @@ export default {
   <div class='forum'>
     <HeaderForum/>
     <CreatePosts/>
-    <ForumPosts :postsList='this.$store.state.Posts'/> 
+    <ForumPosts :postsList='this.$store.state.Posts' :maskedView="0" :PostsLength="this.$store.state.notMaskedPostsLength"/> 
   </div>
 </template>
 

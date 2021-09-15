@@ -3,6 +3,11 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
+    path :'/maskedposts',
+    name: 'Maskedposts',
+    component : () => import('../views/Maskedposts')
+  },
+  {
     path: '/forum',
     name : 'Forum',
     component : () => import('../views/Forum.vue')

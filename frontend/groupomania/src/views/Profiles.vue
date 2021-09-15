@@ -55,7 +55,7 @@ export default {
     <UpdateProfile class='mb-3' />
     <h2>Articles : </h2>
     <h3 v-if="this.$store.state.PostsByNickname.length==0" > Aucun article publié</h3>
-    <ForumPosts :nicknameprop='this.nickname' :postsList='this.$store.state.PostsByNickname '/> 
+    <ForumPosts :nicknameprop='this.nickname' :postsList='this.$store.state.PostsByNickname' :maskedView="0"/> 
   </div>
 </template>
 

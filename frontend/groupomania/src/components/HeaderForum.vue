@@ -5,6 +5,7 @@ export default {
     data(){
       return {
         nickname : null,
+        admin:null,
       }
     }, 
     beforeMount()
@@ -18,6 +19,7 @@ export default {
     .then(posts=> posts.json())
     .then(json=>{
         this.nickname= json[0].nickname
+        this.admin = json[0].admin
     })
     .catch(err=>err);
     },
@@ -33,16 +35,28 @@ export default {
 
 <template>
     <header class='mb-3'>
-        <div class='container'>
-            <nav class='navbar row'>
+        <nav class="navbar navbar-expand-lg navbar-light ">
+            <div class="container-fluid">
                 <router-link class='navbar-brand d-none d-sm-block col-4'  to="/forum"><img alt="Logo Groupomania" src='../assets/icon-left-font-monochrome-black.svg' height="50"></router-link>
                 <router-link class='navbar-brand d-block d-sm-none col-4 '  to="/forum"><img alt="Logo Groupomania" src='../assets/logo-black.png' height="50"></router-link>
-                <ul class='navbar-nav col-6 col-sm-4'>
-                    <li class='nav-item'><router-link class='nav-link' :to="{path:'/profiles:'+this.nickname}"><button class="btn btn-secondary"> Profil </button></router-link></li>
-                    <li class='nav-item'><router-link class='nav-link' to="/login"><button @click="disconnect" class="btn btn-secondary">Se déconnecter</button></router-link></li>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <router-link v-if="this.admin==1" class='nav-link active' to="/maskedposts"><button class="btn btn-secondary">Articles masqués</button></router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class='nav-link active' :to="{path:'/profiles:'+this.nickname}"><button class="btn btn-secondary">Profil</button></router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class='nav-link active' @click="disconnect" to="/login"><button class="btn btn-secondary">Se déconnecter</button></router-link>
+                    </li>
                 </ul>
-            </nav>
-        </div>
+                </div>
+            </div>
+        </nav>
     </header>
 </template>
 

@@ -1,14 +1,17 @@
 <template>  
   <div class='forumPosts'>
     <div class='container '>
-      <div v-for="item in postsList" :key="item.id"> 
+      <div v-for="item in postsList" :key="item.id" >
+        <div v-if="item.masked==maskedView"> 
           <div v-if='this.currentPostUpdate!==item.id' class='postDisplayed card mb-5 mx-auto'>
             <img  v-if='item.imageUrl' :src="item.imageUrl" class="card-img-top" alt="Image d'article">
             <div class="card-body">
               <p class="card-text">{{item.post_text}}</p>
               <p class="card-text"><small class="text-muted">Publié par <router-link class="router-link" :to="{path:'/profiles:'+item.nickname}">{{item.nickname}}</router-link> </small></p>
             </div>
-            <button v-if="this.nickname==item.nickname || this.admin==1"  @click="delPost(item.id)" class="btn mb-1">Supprimer</button>
+            <button v-if="this.nickname==item.nickname"  @click="delPost(item.id)" class="btn mb-1">Supprimer</button>
+            <button v-if="this.admin==1 &&maskedView==0" @click='maskPost(item.id)' class="btn mb-1">Masquer</button>
+            <button v-if="this.admin==1 &&maskedView==1" @click='unmaskPost(item.id)' class="btn mb-1">Démasquer</button>
             <button v-if="this.nickname==item.nickname || this.admin==1" @click='displayPostUpdate(item.id,item.imageUrl,item.post_text)' class="btn ">Modifier</button>
           </div>
           <div v-else class='postUpdate'>
@@ -26,7 +29,9 @@
               </div>
             </div>
           </div>
+        </div>
       </div>
+      <h3 v-if="PostsLength==0">Aucun article disponible </h3>
     </div>
   </div>
 </template>
@@ -34,7 +39,7 @@
 <script>
 export default {
   name: 'ForumPosts',
-  props:['postsList','nicknameprop'],
+  props:['postsList','nicknameprop','maskedView','PostsLength'],
   data (){
     return {
       nicknamep : this.nicknameprop,
@@ -50,6 +55,7 @@ export default {
     }
   },
   beforeMount(){ 
+    this.$store.dispatch('setCurrentPostsLength');
     fetch('http://localhost:3000/api/users/getCurrentUser',{
         method :'GET',
         headers : {
@@ -87,6 +93,73 @@ export default {
     .catch(err=>err);
   },
   methods :{ 
+    maskPost(postid) // Fonction permettant de masquer un article
+    {
+        fetch('http://localhost:3000/api/posts/maskPost/'+ postid, {
+        method : "PUT",
+        headers : {
+            'Accept': 'application/json',
+            'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+        }
+      })
+      .then((response) => {
+          return response.json();
+      })
+      .then((json) => {
+        if (json.error ==='Requête non authentifiée')
+        {
+        this.$swal.fire({
+          title :"Veuillez vous connecter",
+          icon : 'warning',
+        text:json.error});
+        this.$router.push('login')
+        }
+        else
+        {
+          this.$store.dispatch('setCurrentPostsLength');
+          this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+          this.$store.dispatch('setCurrentPosts',json);
+          this.$swal.fire({
+            title :"L'article a bien été masqué",
+            icon : 'success'});
+        }        
+      })
+      .catch((error) => {error})
+    },
+    unmaskPost(postid) // Fonction permettant de démasquer un article
+    {
+        fetch('http://localhost:3000/api/posts/unmaskPost/'+ postid, {
+        method : "PUT",
+        headers : {
+            'Accept': 'application/json',
+            'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+        }
+      })
+      .then((response) => {
+          return response.json();
+      })
+      .then((json) => {
+        if (json.error ==='Requête non authentifiée')
+        {
+        this.$swal.fire({
+          title :"Veuillez vous connecter",
+          icon : 'warning',
+        text:json.error});
+        this.$router.push('login')
+        }
+        else
+        {
+          this.$store.dispatch('setCurrentPostsLength');
+          this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
+          this.$store.dispatch('setCurrentPosts',json);
+          this.$swal.fire({
+            title :"L'article a bien été démasqué",
+            icon : 'success'});
+          this.isEmptyVerify()
+        }        
+      })
+      .catch((error) => {error})
+    },
     // Permet d'annuler la modification d'un article
     cancelUpdate()
     {
@@ -113,10 +186,11 @@ export default {
         }
         else
         {
+          this.$store.dispatch('setCurrentPostsLength');
           this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
           this.$store.dispatch('setCurrentPosts',json);
           this.$swal.fire({
-          title :"Votre article a bien été supprimé",
+          title :"L'article a bien été supprimé",
           icon : 'success'});
         }
         
@@ -181,7 +255,7 @@ export default {
           this.$store.dispatch('setCurrentPostsByNickname',this.nicknamep);
           this.$store.dispatch('setCurrentPosts',json);
           this.$swal.fire({
-            title :"Votre article a bien été modifié",
+            title :"L'article a bien été modifié",
             icon : 'success'});
         }        
       })

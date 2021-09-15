@@ -4,6 +4,8 @@ export default createStore({
   state: {
     Posts : [],
     PostsByNickname:[],
+    MaskedPostsLength : null,
+    notMaskedPostsLength:null,
   },
   mutations: {
     setCurrentPosts(state,posts){
@@ -13,6 +15,15 @@ export default createStore({
     {
       state.PostsByNickname = posts;
     },
+    setCurrentMaskedPostsLength(state,MaskedPosts)
+    {
+      state.MaskedPostsLength=MaskedPosts;
+      
+    },
+    setCurrentnotMaskedPostsLength(state,notMaskedPosts)
+    {
+      state.notMaskedPostsLength=notMaskedPosts;
+    }
 
   },
   actions: {
@@ -43,6 +54,21 @@ export default createStore({
         context.commit('setCurrentPostsByNickname',json)
       })
       .catch(err=>(err));
+    },
+    setCurrentPostsLength(context)
+    {
+      fetch('http://localhost:3000/api/posts/PostsLength',{
+        method :'GET',
+        headers : {
+          'Authorization' : 'Bearer '+ localStorage.getItem('token')
+        }
+      })
+      .then(posts=> posts.json())
+      .then(json=>{
+        context.commit('setCurrentMaskedPostsLength',json.MaskedPosts)
+        context.commit('setCurrentnotMaskedPostsLength',json.notMaskedPosts)
+      })
+      .catch(err=>err);
     },
   },
   modules: {

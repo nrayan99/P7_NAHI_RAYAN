@@ -14,7 +14,7 @@ exports.createPost = (req, res , next) => {
     }
     const post_text = req.body.post_text;
     const nickname = decodedToken.nickname;
-    var sql = `INSERT INTO posts (nickname, imageUrl, post_text) VALUES ('${nickname}','${imageUrl}','${post_text}')`; // configuration de l'article
+    var sql = `INSERT INTO posts (nickname, imageUrl, post_text, masked) VALUES ('${nickname}','${imageUrl}','${post_text}',0)`; // configuration de l'article
     db.query(sql, function (err, result) {
           if (err) throw err;
           db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) { // Renvoi de la liste des articles pour l'affichage dans le front-end
@@ -121,3 +121,53 @@ exports.getPostsByNickname = (req, res , next) => {
     return res.json(result);
   })
 }
+
+
+exports.maskPost = (req,res,next) => {
+  db.query(`UPDATE posts SET masked = '1' WHERE id = '${req.params.id}'`, function (err, result,fields) { 
+    if (err){
+      return res.status(403).json({error : err});
+    };
+  })
+  var sql = `SELECT * FROM posts ORDER BY id DESC`;
+  db.query(sql, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    return res.json(result);
+  })
+}
+
+exports.unmaskPost = (req,res,next) => {
+  db.query(`UPDATE posts SET masked = '0' WHERE id = '${req.params.id}'`, function (err, result,fields) { 
+    if (err){
+      return res.status(403).json({error : err});
+    };
+  })
+  var sql = `SELECT * FROM posts ORDER BY id DESC`;
+  db.query(sql, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    return res.json(result);
+  })
+}
+
+exports.PostsLength = (req, res , next) =>  {
+  var sql = `SELECT * FROM posts WHERE masked='0' ORDER BY id DESC`;
+  db.query(sql, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    const notMaskedPosts = result.length;
+    db.query(`SELECT * FROM posts WHERE masked='1' ORDER BY id DESC`, function (err, result,fields) {
+      if (err){
+        return res.status(403).json({error : err});
+      };
+      console.log(result)
+      const MaskedPosts = result.length;
+      res.json({notMaskedPosts,MaskedPosts})
+    })
+    
+  })
+} 

@@ -9,5 +9,8 @@ router.get('/getAllPosts', auth, postsCtrl.getAllPosts);
 router.delete('/deletePost/:id', auth, postsCtrl.deletePost);
 router.put('/updatePost/:id',auth , multer, postsCtrl.updatePost);
 router.get('/getPostsByNickname/:nickname', auth, postsCtrl.getPostsByNickname);
+router.put('/maskPost/:id',auth, postsCtrl.maskPost)
+router.put('/unmaskPost/:id',auth, postsCtrl.unmaskPost)
+router.get('/PostsLength',auth,postsCtrl.PostsLength)
 
 module.exports=router;

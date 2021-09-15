@@ -13,7 +13,9 @@ export default {
     methods : {
         //Fonction permettant d'envoyer un post au backend
         submitPost(){
-            const fd = new FormData()
+            if(!(this.item.image==null&&this.textarea==''))
+            {
+                const fd = new FormData()
             fd.append('image',this.item.image);
             fd.append('post_text',this.textarea);         
             fetch('http://localhost:3000/api/posts/createPost', {
@@ -38,6 +40,7 @@ export default {
                 }
                 else
                 {
+                    this.$store.dispatch('setCurrentPostsLength');
                     this.$store.dispatch('setCurrentPosts',json);
                     this.item.image=null;
                     this.item.imageUrl=null;
@@ -50,6 +53,14 @@ export default {
                
             })
             .catch((error) => error)
+            }
+            else
+            {
+                this.$swal.fire({
+                    title :"Veuillez saisir une image ou un texte",
+                    icon : 'warning'});
+            }
+            
         },
         // Fonction permettant de stocker les données de l'image upload
         uploadImage(e) {
