@@ -10,19 +10,19 @@ export default {
   },
   methods : 
   {
-    textValidation(value) {
+    textValidation(value) { // test regex sur le pseudo
     const regex = /^[A-Za-z][^_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/;
     return regex.test(value);
     },
-    emailValidation(value) {
+    emailValidation(value) { // test regex sur l'email
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
       return regex.test(value);
     },
-    passwordValidation (value) {
+    passwordValidation (value) { // test regex sur le mot de passe
       const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/ ;
       return regex.test(value);
     },
-    postSignup(e){
+    postSignup(e){ // Permet de s'inscrire
       e.preventDefault();
       if(this.emailValidation(this.email) && this.passwordValidation(this.password) && this.textValidation(this.nickname))
       {

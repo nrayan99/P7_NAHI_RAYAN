@@ -13,13 +13,13 @@ export default {
     }
   },
   methods: {
-    postLogin(e){
+    postLogin(e){ // Permet de se connecter
       e.preventDefault();
       const login = {
         email : this.email,
         password : this.password
       }
-      fetch('http://localhost:3000/api/users/login', {
+      fetch('http://localhost:3000/api/users/login', { 
           method : "POST",
           body :  JSON.stringify(login),
           headers : {

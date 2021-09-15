@@ -3,7 +3,7 @@
 export default {
   name: 'UpdateProfile',
   beforeMount(){
-    fetch('http://localhost:3000/api/users/getProfileImageByNickname/'+this.ProfileNickname,{
+    fetch('http://localhost:3000/api/users/getProfileImageByNickname/'+this.ProfileNickname,{ // Recupère la photo de profil de l'utilisateur
       method :'GET',
       headers : {
         'Authorization' : 'Bearer '+ localStorage.getItem('token'),
@@ -49,16 +49,16 @@ export default {
     }
   },
   methods:{
-    passwordValidation (value) {
+    passwordValidation (value) { // Test regex sur le mot de passe
       const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/ ;
       return regex.test(value);
     },
-    updateImage(e) {
+    updateImage(e) { // permet de charger les données de l'image de profil modifié
       const file = e.target.files[0]
       this.item.image = file
       this.item.imageUrl = URL.createObjectURL(file)
     },
-    uploadImage(){
+    uploadImage(){  // Permet d'envoyer l'image modifie au backend
       const fd = new FormData()
       fd.append('image',this.item.image);
       if (document.getElementById('image').value!="")
@@ -104,14 +104,14 @@ export default {
           icon : 'warning'});
       }
     },
-    cancelUpdate(){
+    cancelUpdate(){ // Permet de revenir à l'etat initial des boutons de modifications
       this.isUpdating.ProfilePicture=false;
       this.isUpdating.Profile=false;
       this.isUpdating.Password=false;
       this.isUpdating.delAccount=false;
       this.item.imageUrl = this.profileImageUrl;
     },
-    updatePassword(){
+    updatePassword(){ // Permet de modifier son mot de passe
       if (this.passwordValidation(this.newPassword))
       {
         const passwordUpdating = {
@@ -166,7 +166,7 @@ export default {
           text :"Votre mot de passe doit contenir : 1 majuscule,1 minuscule et 8 caracteres"});
         }
     },
-    deleteAccount(){
+    deleteAccount(){ // Permet de supprimer son compte
       fetch('http://localhost:3000/api/users/deleteAccount/' + this.nickname, {
         method: 'DELETE',
         headers : {'Authorization' : 'Bearer '+ localStorage.getItem('token')}

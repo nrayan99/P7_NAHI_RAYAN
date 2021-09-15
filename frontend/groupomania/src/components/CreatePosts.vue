@@ -11,6 +11,7 @@ export default {
         }     
     },
     methods : {
+        //Fonction permettant d'envoyer un post au backend
         submitPost(){
             const fd = new FormData()
             fd.append('image',this.item.image);
@@ -51,11 +52,13 @@ export default {
             })
             .catch((error) => error)
         },
+        // Fonction permettant de stocker les données de l'image upload
         uploadImage(e) {
             const file = e.target.files[0]
             this.item.image = file
             this.item.imageUrl = URL.createObjectURL(file)
         },
+        //Fonction permettant de supprimer les données de l'image upload lors de la suppression de cette dernière
         delImg()
         {
             this.item.imageUrl=null;

@@ -1,6 +1,6 @@
-const mysql = require('mysql');
-require('dotenv').config();
-const db = mysql.createConnection({
+const mysql = require('mysql'); // On importe mysql pour utiliser les fonctions permettant d'interagir avec la base de donnée
+require('dotenv').config(); // Importation de dotenv nous permettant d'utilliser les variables d'environnement
+const db = mysql.createConnection({ // Permet de se connecter à la base de donnée 
 
     host: process.env.MYSQL_HOST,
  
@@ -11,7 +11,7 @@ const db = mysql.createConnection({
     database: process.env.MYSQL_DB,
   });
 
-db.connect(function(err) {
+db.connect(function(err) { // Crée les tables users et posts
     if (err) throw err;
     console.log("Connecté à la base de données MySQL!");
     var usersTable = "CREATE TABLE IF NOT EXISTS users (id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,nickname  VARCHAR(255), email  VARCHAR(255), password VARCHAR(255), admin SMALLINT, profileimg VARCHAR(255), UNIQUE(nickname,email) )";
@@ -27,4 +27,4 @@ db.connect(function(err) {
 
 });
 
-module.exports = db;
+module.exports = db; // On exporte le module db afin de pouvoir l'utiliser dans les autres fichiers
