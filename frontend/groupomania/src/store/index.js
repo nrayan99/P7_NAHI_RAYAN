@@ -30,7 +30,7 @@ export default createStore({
     setCurrentPosts(context, posts){
       context.commit('setCurrentPosts',posts); 
     },
-    setCurrentPostsByNickname(context,nickname){
+    setCurrentPostsByNickname(context,nickname){ // Récupère les articles d'un utilisateur
       fetch('http://localhost:3000/api/posts/getPostsByNickname/'+nickname,{
         method :'GET',
         headers : {
@@ -56,7 +56,7 @@ export default createStore({
       .catch(err=>(err));
     },
     setCurrentPostsLength(context)
-    {
+    { // Recupère la longueur de la listes des articles masqués et des articles non masqués
       fetch('http://localhost:3000/api/posts/PostsLength',{
         method :'GET',
         headers : {

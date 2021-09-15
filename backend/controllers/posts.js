@@ -123,7 +123,7 @@ exports.getPostsByNickname = (req, res , next) => {
 }
 
 
-exports.maskPost = (req,res,next) => {
+exports.maskPost = (req,res,next) => { // permet de masquer un poste
   db.query(`UPDATE posts SET masked = '1' WHERE id = '${req.params.id}'`, function (err, result,fields) { 
     if (err){
       return res.status(403).json({error : err});
@@ -138,7 +138,7 @@ exports.maskPost = (req,res,next) => {
   })
 }
 
-exports.unmaskPost = (req,res,next) => {
+exports.unmaskPost = (req,res,next) => { // permet de démasquer un article
   db.query(`UPDATE posts SET masked = '0' WHERE id = '${req.params.id}'`, function (err, result,fields) { 
     if (err){
       return res.status(403).json({error : err});
@@ -153,7 +153,7 @@ exports.unmaskPost = (req,res,next) => {
   })
 }
 
-exports.PostsLength = (req, res , next) =>  {
+exports.PostsLength = (req, res , next) =>  { // renvoie la longueur de la listes des articles masqués et des articles non masqués
   var sql = `SELECT * FROM posts WHERE masked='0' ORDER BY id DESC`;
   db.query(sql, function (err, result,fields) {
     if (err){

@@ -15,7 +15,7 @@ export default {
   beforeCreate(){
     
     this.$store.dispatch('setCurrentPostsLength');
-      fetch('http://localhost:3000/api/users/getCurrentUser',{
+      fetch('http://localhost:3000/api/users/getCurrentUser',{ // teste l'utilisateur actuel et verifie si cet utilisateur est un admin sinon il retour sur la page forum
       method :'GET',
       headers : {
         'Authorization' : 'Bearer '+ localStorage.getItem('token')
