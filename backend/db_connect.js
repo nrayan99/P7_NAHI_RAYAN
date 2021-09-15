@@ -14,7 +14,7 @@ const db = mysql.createConnection({ // Permet de se connecter à la base de donn
 db.connect(function(err) { // Crée les tables users et posts
     if (err) throw err;
     console.log("Connecté à la base de données MySQL!");
-    var usersTable = "CREATE TABLE IF NOT EXISTS users (id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,nickname  VARCHAR(255), email  VARCHAR(255), password VARCHAR(255), admin SMALLINT, profileimg VARCHAR(255), UNIQUE(nickname,email) )";
+    var usersTable = "CREATE TABLE IF NOT EXISTS users (id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,nickname  VARCHAR(110), email  VARCHAR(110), password VARCHAR(255), admin SMALLINT, profileimg VARCHAR(255), UNIQUE(nickname,email) )";
     db.query(usersTable, function (err, result) {
         if (err) throw err;
         console.log("Table users available");

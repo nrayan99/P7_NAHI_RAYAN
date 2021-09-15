@@ -53,12 +53,12 @@ export default {
     fetch('http://localhost:3000/api/posts/getAllPosts',{
       method :'GET',
       headers : {
-        'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+        'Authorization' : 'Bearer '+ localStorage.getItem('token')
       }
     })
     .then(posts=> posts.json())
     .then(json=>{
-      if (json.error ==='Requête non authentifiée')
+      if (json.error)
       {
         this.$swal.fire({
           title :"Veuillez vous connecter",
