@@ -71,6 +71,17 @@ exports.getProfileImageByNickname = (req,res,next) => {
     };
     if (result.length>0) // Permet d'empecher l'arrivée sur une page de profil d'un utilisateur inexistant en verifiant si il y'a un resultat à la requête (sinon l'utilisateur n'existe pas)
     {
+      if (result[0].profileimg=='admin')
+      {
+        const profileimg = `${req.protocol}://${req.get('host')}/images/no-picture.jpg` // Initialisation de l'image de base des utilisateurs 
+        var sql = `UPDATE users SET profileimg = '${profileimg}' WHERE nickname = '${req.params.nickname}'` // Mise à jour de l'URL de la photo de profil de l'utilsateur dans la base de donnée
+        db.query(sql, function (err, result,fields) {
+          if (err){
+             return res.status(403).json({error : err});
+          };
+          return res.json(profileimg)
+        })
+      }
       return res.json(result[0].profileimg); // Renvoi de l'url de la photo de profil au frontend
     }
     else
