@@ -15,8 +15,7 @@ export default {
         submitPost(){
             const fd = new FormData()
             fd.append('image',this.item.image);
-            fd.append('userId',localStorage.getItem('userId'));
-            fd.append('post_text',this.textarea)         
+            fd.append('post_text',this.textarea);         
             fetch('http://localhost:3000/api/posts/createPost', {
                 method : "POST",
                 body :  fd,

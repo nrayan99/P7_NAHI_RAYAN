@@ -40,15 +40,17 @@ exports.login = (req,res,next) =>
             if (!valid){
                 return res.status(401).json({error:'Mot de passe incorrect !'}); // Si le mot de passe ne correspond pas alors un message d'erreur est renvoyé afin d'avertir l'utilisateur 
             }
+            const token = jwt.sign( //nous generons le token avec la fonction jwt.sign contenant l'userId, la clé de déchiffrage ainsi qu'un temps de vie du token de 24h
+              {nickname : result[0].nickname},
+              process.env.TOKEN_KEY,
+              { expiresIn : '24h'}
+            )
             res.status(200).json({ // Si le mot de passe est valide nous renvoyons les differentes données à mettre dans le localstorage
               admin : result[0].admin,
               userId: result[0].id,
               nickname: result[0].nickname,
-              token: jwt.sign( //nous generons le token avec la fonction jwt.sign contenant l'userId, la clé de déchiffrage ainsi qu'un temps de vie du token de 24h
-                  {userId : result[0].id},
-                  process.env.TOKEN_KEY,
-                  { expiresIn : '24h'}
-              )
+              token : token,
+
           });
         })
         .catch(error => res.status(500).json({error}));
@@ -75,6 +77,20 @@ exports.getProfileImageByNickname = (req,res,next) => {
     {
       return res.status(404).json({error:"Utilisateur inexistant"}) // Renvoi d'un message d'erreur si l'utilisateur n'existe pas 
     }
+  })
+}
+
+
+exports.getCurrentUser = (req,res,next) => {
+  const token = req.headers.authorization.split(' ')[1]; 
+  const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+  const nickname = decodedToken.nickname
+  var sql = `SELECT * FROM users  WHERE nickname ='${nickname}'`; // Selection de l'URL de la photo de profil de l'utilisateur selon un nickname en paramètre
+  db.query(sql, function (err, result,fields) {
+    if (err){
+      return res.status(403).json({error : err});
+    };
+    res.json(result)
   })
 }
 

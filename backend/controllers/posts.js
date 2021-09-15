@@ -1,29 +1,29 @@
 const db = require('../db_connect'); // Importation du fichier contenant les paramètre de connexion de la base de données, nous permettant ainsi d'interagir avec la base de donnée
 const fs = require('fs'); // Importation de fs nous permettant d'interagir avec les fichiers du dossier images
+const jwt = require('jsonwebtoken'); //Importation de jsonwebtoken afin de decrypter le token
+require('dotenv').config(); // Importation de dotenv nous permettant d'utilliser les variables d'environnement
 
 // Fonction permettant de creer un article 
 exports.createPost = (req, res , next) => {
-    const userId = req.body.userId; // Recuperation de l'userId
+    const token = req.headers.authorization.split(' ')[1]; 
+    const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);  // Decode le token a l'aide de la fonction jwt.veryfy et de la clé de chiffrement 
     let imageUrl=''; 
     if (req.file) // Si une image est envoyée lors de la création de l'article : changement de imageUrl avec l'URL de l'image envoyée
     {
       imageUrl =`${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     }
     const post_text = req.body.post_text;
-    db.query(`SELECT nickname FROM users WHERE id = '${userId}'`, function (err, result) { // selection du nickname de l'utilisateur ayant effectué l'article
-      if (err) throw err;
-      const nickname = result[0].nickname;
-      var sql = `INSERT INTO posts (nickname, imageUrl, post_text) VALUES ('${nickname}','${imageUrl}','${post_text}')`; // configuration de l'article
-      db.query(sql, function (err, result) {
-            if (err) throw err;
-            db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) { // Renvoi de la liste des articles pour l'affichage dans le front-end
-              if (err){
-                return res.status(403).json({error : err});
-              };
-            return res.json(result);
-            })
+    const nickname = decodedToken.nickname;
+    var sql = `INSERT INTO posts (nickname, imageUrl, post_text) VALUES ('${nickname}','${imageUrl}','${post_text}')`; // configuration de l'article
+    db.query(sql, function (err, result) {
+          if (err) throw err;
+          db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) { // Renvoi de la liste des articles pour l'affichage dans le front-end
+            if (err){
+              return res.status(403).json({error : err});
+            };
+          return res.json(result);
+          })
       })
-  })
 }
 
 //Fonction permettant de recuperer tous les articles présents dans la base de donnée

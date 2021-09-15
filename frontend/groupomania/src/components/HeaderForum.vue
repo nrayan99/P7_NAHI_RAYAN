@@ -2,16 +2,31 @@
 
 export default {
   name: 'HeaderForum',
-  methods:{ 
+    data(){
+      return {
+        nickname : null,
+      }
+    }, 
+    beforeMount()
+    {
+    fetch('http://localhost:3000/api/users/getCurrentUser',{
+        method :'GET',
+        headers : {
+        'Authorization' : 'Bearer '+ localStorage.getItem('token')
+        }
+    })
+    .then(posts=> posts.json())
+    .then(json=>{
+        this.nickname= json[0].nickname
+    })
+    .catch(err=>err);
+    },
+    methods:{
     disconnect(){
         localStorage.clear();
     },
   },
-  data(){
-      return {
-        nickname : localStorage.nickname,
-      }
-  },
+
   
 }
 </script>

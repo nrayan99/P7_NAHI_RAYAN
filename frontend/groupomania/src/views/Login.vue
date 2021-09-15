@@ -5,13 +5,6 @@ export default {
   components : {
     HeaderLogin,
   },
-  data() {
-    return {
-      item : {
-      userId : null
-      }
-    }
-  },
   methods: {
     postLogin(e){ // Permet de se connecter
       e.preventDefault();
@@ -31,10 +24,7 @@ export default {
         .then((json) => {
           if ( !json.error)
           {
-            localStorage.setItem('userId', json.userId);
             localStorage.setItem('token', json.token);
-            localStorage.setItem('nickname',json.nickname);
-            localStorage.setItem('admin',json.admin);
             this.$router.push('forum');  
           }
           else

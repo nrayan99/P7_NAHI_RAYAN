@@ -12,7 +12,8 @@ export default createStore({
     setCurrentPostsByNickname(state,posts)
     {
       state.PostsByNickname = posts;
-    }
+    },
+
   },
   actions: {
     setCurrentPosts(context, posts){

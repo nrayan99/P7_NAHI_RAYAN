@@ -3,6 +3,17 @@
 export default {
   name: 'UpdateProfile',
   beforeMount(){
+    fetch('http://localhost:3000/api/users/getCurrentUser',{
+    method :'GET',
+    headers : {
+      'Authorization' : 'Bearer '+ localStorage.getItem('token')
+    }
+  })
+  .then(posts=> posts.json())
+  .then(json=>{
+    this.nickname= json[0].nickname
+  })
+  .catch(err=>err);
     fetch('http://localhost:3000/api/users/getProfileImageByNickname/'+this.ProfileNickname,{ // Recupère la photo de profil de l'utilisateur
       method :'GET',
       headers : {
@@ -43,7 +54,7 @@ export default {
       image : null,
       imageUrl: null,
       },
-      nickname:localStorage.nickname,
+      nickname:null,
       profileImageUrl:null ,
       ProfileNickname: window.location.href.split('profiles:')[1],
     }

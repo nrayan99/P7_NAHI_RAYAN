@@ -44,13 +44,26 @@ export default {
         textarea:null,
         imageDeleted:0,
       },
-      nickname : localStorage.nickname,
-      admin : localStorage.admin,
+      nickname:null,
+      admin : null,
       currentPostUpdate : null,
     }
   },
-  beforeMount(){ // Permet de recupérer tous les articles et de les stocker dans le store
-    fetch('http://localhost:3000/api/posts/getAllPosts',{
+  beforeMount(){ 
+    fetch('http://localhost:3000/api/users/getCurrentUser',{
+        method :'GET',
+        headers : {
+          'Authorization' : 'Bearer '+ localStorage.getItem('token')
+        }
+      })
+      .then(posts=> posts.json())
+      .then(json=>{
+        this.nickname= json[0].nickname
+        this.admin= json[0].admin
+      })
+      .catch(err=>err);
+    
+    fetch('http://localhost:3000/api/posts/getAllPosts',{// Permet de recupérer tous les articles et de les stocker dans le store
       method :'GET',
       headers : {
         'Authorization' : 'Bearer '+ localStorage.getItem('token')
@@ -68,8 +81,7 @@ export default {
       }
       else
       {
-        this.$store.dispatch('setCurrentPosts',json);
-        
+        this.$store.dispatch('setCurrentPosts',json); 
       }
     })
     .catch(err=>err);
