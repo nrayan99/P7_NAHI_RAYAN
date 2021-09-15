@@ -17,14 +17,16 @@ MYSQL_DB= *Votre nom de base de donnée MYSQL*
 
 TOKEN_KEY=*Choisir une clé complexe pour les tokens de JSONWEBTOKEN*
 
+adminUser= *Choisir le nom d'utilisateur pour le compte admin*
+
+adminEmail= *Choisir l'email pour le compte admin*
+
+adminPassword = *Choisir le mot de passe pour le compte admin*
+
 **Lancement du projet**
 - Dans la console sur le dossier backend saisir : "node server" ou "nodemon serve" si vous avez nodemon
 - Dans la console sur le dossier frontend/groupomania saisir : "npm run serve"
 
 
-**Creation d'un compte admin sur l'API**
-- Creer un compte sur l'API
-- Dans la console de MYSQL veuillez entrer cette ligne : UPDATE users SET admin = 1 WHERE nickname = '*Le pseudo de l'utilisateur que vous souhaitez rendre admin*'
-- Puis se connecter avec le compte
 
  
