@@ -15,7 +15,7 @@ MYSQL_PASSWORD= *Votre mot de passe d'utilisateur MYSQL*
 
 MYSQL_DB= *Votre nom de base de donnée MYSQL*
 
-TOKEN_KEY=*Choisir une clé de dechiffrement complexe pour les tokens de JSONWEBTOKEN la clé ne doit pas être vide !*
+TOKEN_KEY=*Choisir une clé de dechiffrement complexe pour les tokens de JSONWEBTOKEN la clé ne doit pas être vide ! exemple:RANDOM_TOKEN_SECRET*
 
 adminUser= *Choisir le nom d'utilisateur pour le compte admin*
 
