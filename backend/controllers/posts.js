@@ -164,7 +164,6 @@ exports.PostsLength = (req, res , next) =>  { // renvoie la longueur de la liste
       if (err){
         return res.status(403).json({error : err});
       };
-      console.log(result)
       const MaskedPosts = result.length;
       res.json({notMaskedPosts,MaskedPosts})
     })
