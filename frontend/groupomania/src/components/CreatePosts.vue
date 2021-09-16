@@ -13,68 +13,78 @@ export default {
     methods : {
         //Fonction permettant d'envoyer un post au backend
         submitPost(){
+
             if(!(this.item.image==null&&this.textarea==''))
             {
+                var now = new Date()
+                var annee   = now.getFullYear();
+                var mois    = now.getMonth() + 1;
+                var jour    = now.getDate();
+                var heure   = now.getHours();
+                var minute  = now.getMinutes();
+                var seconde = now.getSeconds();
+                const postedDate=jour+"/"+mois+"/"+annee+" à "+heure+" heure "+minute+" minutes "+seconde+" secondes"
                 const fd = new FormData()
-            fd.append('image',this.item.image);
-            fd.append('post_text',this.textarea);         
-            fetch('http://localhost:3000/api/posts/createPost', {
-                method : "POST",
-                body :  fd,
-                headers : {
-                    'Accept': 'application/json',
-                    'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-                }
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((json) => {
-                if (json.error ==='Requête non authentifiée')
-                {
-                    this.$swal.fire({
-                        title :"Veuillez vous connecter",
-                        icon : 'warning',
-                        text:json.error});
-                    this.$router.push('login')
+                fd.append('image',this.item.image);
+                fd.append('post_text',this.textarea);
+                fd.append('date',postedDate)    
+                fetch('http://localhost:3000/api/posts/createPost', {
+                    method : "POST",
+                    body :  fd,
+                    headers : {
+                        'Accept': 'application/json',
+                        'Authorization' : 'Bearer '+ localStorage.getItem('token'),
+                    }
+                })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((json) => {
+                    if (json.error ==='Requête non authentifiée')
+                    {
+                        this.$swal.fire({
+                            title :"Veuillez vous connecter",
+                            icon : 'warning',
+                            text:json.error});
+                        this.$router.push('login')
+                    }
+                    else
+                    {
+                        this.$store.dispatch('setCurrentPostsLength');
+                        this.$store.dispatch('setCurrentPosts',json);
+                        this.item.image=null;
+                        this.item.imageUrl=null;
+                        this.textarea='';
+                        document.getElementById('image').value='';  
+                        this.$swal.fire({
+                            title :"Votre article a bien été crée",
+                            icon : 'success'});
+                    }
+                
+                })
+                .catch((error) => error)
                 }
                 else
                 {
-                    this.$store.dispatch('setCurrentPostsLength');
-                    this.$store.dispatch('setCurrentPosts',json);
-                    this.item.image=null;
-                    this.item.imageUrl=null;
-                    this.textarea='';
-                    document.getElementById('image').value='';  
                     this.$swal.fire({
-                        title :"Votre article a bien été crée",
-                        icon : 'success'});
+                        title :"Veuillez saisir une image ou un texte",
+                        icon : 'warning'});
                 }
-               
-            })
-            .catch((error) => error)
-            }
-            else
+                
+            },
+            // Fonction permettant de stocker les données de l'image upload
+            uploadImage(e) {
+                const file = e.target.files[0]
+                this.item.image = file
+                this.item.imageUrl = URL.createObjectURL(file)
+            },
+            //Fonction permettant de supprimer les données de l'image upload lors de la suppression de cette dernière
+            delImg()
             {
-                this.$swal.fire({
-                    title :"Veuillez saisir une image ou un texte",
-                    icon : 'warning'});
+                this.item.imageUrl=null;
+                this.item.image=null;
+                document.getElementById('image').value='';
             }
-            
-        },
-        // Fonction permettant de stocker les données de l'image upload
-        uploadImage(e) {
-            const file = e.target.files[0]
-            this.item.image = file
-            this.item.imageUrl = URL.createObjectURL(file)
-        },
-        //Fonction permettant de supprimer les données de l'image upload lors de la suppression de cette dernière
-        delImg()
-        {
-            this.item.imageUrl=null;
-            this.item.image=null;
-            document.getElementById('image').value='';
-        }
     }
 }
 
