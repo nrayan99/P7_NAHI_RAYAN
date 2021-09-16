@@ -27,7 +27,7 @@ export default {
       if(this.emailValidation(this.email) && this.passwordValidation(this.password) && this.textValidation(this.nickname))
       {
         const signup = {
-        nickname : this.nickname,
+        nickname : this.nickname.toUpperCase(),
         email : this.email,
         password : this.password
       }
