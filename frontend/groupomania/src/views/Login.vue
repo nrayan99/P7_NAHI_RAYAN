@@ -6,36 +6,50 @@ export default {
     HeaderLogin,
   },
   methods: {
+    emailValidation(value) { // test regex sur l'email
+    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
+    return regex.test(value);
+    },
     postLogin(e){ // Permet de se connecter
       e.preventDefault();
-      const login = {
-        email : this.email,
-        password : this.password
+      if (this.emailValidation(this.email))
+      {
+          const login = {
+          email : this.email,
+          password : this.password
+          }
+          fetch('http://localhost:3000/api/users/login', { 
+              method : "POST",
+              body :  JSON.stringify(login),
+              headers : {
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+              }
+            })
+            .then((response) => response.json())
+            .then((json) => {
+              if ( !json.error)
+              {
+                localStorage.setItem('token', json.token);
+                this.$router.push('forum');  
+              }
+              else
+              {
+                this.$swal.fire({
+                title :"Connexion échouée",
+                icon : 'error',
+                text:json.error});
+              }
+            })
+            .catch((error) => error)
       }
-      fetch('http://localhost:3000/api/users/login', { 
-          method : "POST",
-          body :  JSON.stringify(login),
-          headers : {
-            'Accept': 'application/json',
-            "Content-Type": "application/json",
-          }
-        })
-        .then((response) => response.json())
-        .then((json) => {
-          if ( !json.error)
-          {
-            localStorage.setItem('token', json.token);
-            this.$router.push('forum');  
-          }
-          else
-          {
-            this.$swal.fire({
-            title :"Connexion échouée",
-            icon : 'error',
-            text:json.error});
-          }
-        })
-        .catch((error) => error)
+      else
+      {
+        this.$swal.fire({
+        title :"Utilisateur incorrect",
+        icon : 'error'});
+      }
+
     }
   },
   beforeCreate(){
