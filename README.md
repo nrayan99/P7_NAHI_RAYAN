@@ -24,7 +24,7 @@ adminEmail= *Choisir l'email pour le compte admin*
 adminPassword = *Choisir le mot de passe pour le compte admin*
 
 **Lancement du projet**
-- Dans la console sur le dossier backend saisir : "node server" ou "nodemon serve" si vous avez nodemon
+- Dans la console sur le dossier backend saisir : à la première utilisation  "node createDb.js & node server" ou "node createDb.js nodemon serve" si vous avez nodemon afin de créer la base de donnée puis aux utilisations suivantes seulement "node server" ou 'nodemon serve'
 - Dans la console sur le dossier frontend/groupomania saisir : "npm run serve"
 
 
