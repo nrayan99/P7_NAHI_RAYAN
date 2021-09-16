@@ -14,7 +14,7 @@ exports.signup = (req,res,next) =>
     .then(hash=>{
         const password=hash;
         const profileimg = `${req.protocol}://${req.get('host')}/images/no-picture.jpg` // Initialisation de l'image de base des utilisateurs 
-        var sql = `INSERT INTO users (nickname, email, password, admin, profileimg) VALUES ('${nickname}','${email}',\"${password}"\, '0' , '${profileimg}')`; // Ajout de l'utilisateur dans la base de donnée
+        var sql = `INSERT INTO users (nickname, email, password, admin, profileimg) VALUES ('${nickname}','${email}',"${password}", '0' , '${profileimg}')`; // Ajout de l'utilisateur dans la base de donnée
         db.query(sql, function (err, result) {
              if (err){
                 return res.status(403).json({error : "Les informations entrées sont déjà utilisées"}); // Si le nickname et/ou l'email est déjà utilisé : renvoi d'un message d'erreur pour avertir l'utilisateur
@@ -142,7 +142,7 @@ exports.UpdatePassword = (req,res,next) => {
         }
         bcrypt.hash(req.body.newPassword,10) //Si le mot de passe actuel est correct nous hashons le nouveau mot de passe à l'aide de bcrypt.hash
         .then(hash => {
-          var sql = `UPDATE users SET password = \"${hash}"\ WHERE nickname = '${req.params.nickname}'` // Nous mettons à jour le mot de passe de l'utilisateur 
+          var sql = `UPDATE users SET password = "${hash}" WHERE nickname = '${req.params.nickname}'` // Nous mettons à jour le mot de passe de l'utilisateur 
           db.query(sql, function (err, result,fields) {
             if (err){
               return res.status(403).json({error : err});

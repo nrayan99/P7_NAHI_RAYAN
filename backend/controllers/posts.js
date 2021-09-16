@@ -14,7 +14,7 @@ exports.createPost = (req, res , next) => {
     }
     const post_text = req.body.post_text;
     const nickname = decodedToken.nickname;
-    var sql = `INSERT INTO posts (nickname, imageUrl, post_text, masked,date) VALUES ('${nickname}','${imageUrl}',\"${post_text}"\,0,'${req.body.date}')`; // configuration de l'article
+    var sql = `INSERT INTO posts (nickname, imageUrl, post_text, masked,date) VALUES ('${nickname}','${imageUrl}',"${post_text}",0,'${req.body.date}')`; // configuration de l'article
     db.query(sql, function (err, result) {
           if (err) throw err;
           db.query(`SELECT * FROM posts ORDER BY id DESC`, function (err, result,fields) { // Renvoi de la liste des articles pour l'affichage dans le front-end
@@ -96,7 +96,7 @@ exports.updatePost = (req,res,next) => {
         })
       }
     }
-    db.query(`UPDATE posts SET post_text = \"${req.body.post_text}"\ WHERE id = '${req.params.id}'`, function (err, result,fields) { // Mise à jour du texte de l'article
+    db.query(`UPDATE posts SET post_text = "${req.body.post_text}" WHERE id = '${req.params.id}'`, function (err, result,fields) { // Mise à jour du texte de l'article
       if (err){
          return res.status(403).json({error : err});
       };
