@@ -13,7 +13,7 @@ MYSQL_USER= *Votre nom d'utilisateur MYSQL*
 
 MYSQL_PASSWORD= *Votre mot de passe d'utilisateur MYSQL*
 
-MYSQL_DB= *Votre nom de base de donnée MYSQL*
+MYSQL_DB= *Choisir un nom de base de donnée MYSQL qui sera crée au lancement du projet*
 
 TOKEN_KEY=*Choisir une clé de dechiffrement complexe pour les tokens de JSONWEBTOKEN la clé ne doit pas être vide ! exemple:RANDOM_TOKEN_SECRET*
 
