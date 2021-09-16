@@ -7,7 +7,7 @@
             <img  v-if='item.imageUrl' :src="item.imageUrl" class="card-img-top" alt="Image d'article">
             <div class="card-body">
               <p class="card-text">{{item.post_text}}</p>
-              <p class="card-text"><small class="text-muted">Publié par <router-link class="router-link" :to="{path:'/profiles:'+item.nickname}">{{item.nickname}}</router-link>le {{item.date}} </small></p>
+              <p class="card-text"><small class="text-muted">Publié par <router-link class="router-link" :to="{path:'/profiles:'+item.nickname}">{{item.nickname}}</router-link> le {{item.date}} </small></p>
             </div>
             <button v-if="this.nickname==item.nickname"  @click="delPost(item.id)" class="btn mb-1">Supprimer</button>
             <button v-if="this.admin==1 &&maskedView==0" @click='maskPost(item.id)' class="btn mb-1">Masquer</button>
