@@ -201,3 +201,7 @@ exports.deleteAccount = (req,res,next) => {
   })
   
 }
+
+exports.isConnected = (req,res,next) => {
+  res.json({message:'Utilisateur connecté'})
+}

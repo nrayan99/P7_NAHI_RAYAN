@@ -11,4 +11,5 @@ router.get('/getCurrentUser', auth , userCtrl.getCurrentUser)
 router.put('/UpdateProfilePicture/:nickname',auth,multer,userCtrl.UpdateProfilePicture);
 router.put('/UpdatePassword/:nickname',auth,userCtrl.UpdatePassword);
 router.delete('/deleteAccount/:nickname',auth,userCtrl.deleteAccount)
+router.get('/isConnected',auth, userCtrl.isConnected)
 module.exports=router;

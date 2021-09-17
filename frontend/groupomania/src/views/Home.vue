@@ -8,7 +8,26 @@ export default {
   }
   ,
     beforeCreate(){
-    localStorage.clear();
+      fetch('http://localhost:3000/api/users/isConnected',{ // teste si la personne est connecté 
+        method :'GET',
+          headers : {
+            'Authorization' : 'Bearer '+ localStorage.getItem('token')
+          }
+        })
+        .then(posts=> posts.json())
+        .then(json=>{
+          if (json.error)
+          {
+            localStorage.clear();
+          }
+          else
+          {
+            this.$router.push('forum')
+          }
+
+        })
+        .catch(err=>err);
+
   },
   methods :{
   },
