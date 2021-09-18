@@ -5,27 +5,7 @@ import UpdateProfile from '../components/UpdateProfile.vue'
 export default {
   name: 'Profiles',
   created(){
-    fetch('http://localhost:3000/api/posts/getPostsByNickname/'+this.nickname,{ // Charge les posts de l'utilisateur dont le profil est visité
-      method :'GET',
-      headers : {
-        'Authorization' : 'Bearer '+ localStorage.getItem('token'),
-      }
-    })
-    .then(posts=> posts.json())
-    .then(json=>{
-      if (json.error ==='Requête non authentifiée')
-      {
-        this.$swal.fire({
-          title :"Veuillez vous connecter",
-          icon : 'warning'});
-        this.$router.push('login');
-      }
-      else
-      {
-        this.$store.state.PostsByNickname = json;
-      }
-    })
-    .catch(err=>(err));
+    this.$store.dispatch('setCurrentPostsByNickname', this.nickname)
   },
   data (){
     return {
